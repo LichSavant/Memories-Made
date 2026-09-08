@@ -5,7 +5,9 @@ import Footer from "../components/Footer";
 
 export default function SiteLayout() {
   const { pathname } = useLocation();
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   return (
     <div className="site-shell internal-shell">
       <SiteHeader />

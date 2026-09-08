@@ -10,6 +10,8 @@
   --champagne: #cbb59b;
   --line: rgba(245, 238, 228, 0.34);
   --page-padding: clamp(1.4rem, 4vw, 4rem);
+  --bottom-nav-height: 84px;
+  --bottom-nav-space: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
   color: var(--cream);
   font-family: "Inter", Arial, sans-serif;
   font-synthesis: none;
@@ -68,6 +70,30 @@ textarea:focus-visible {
   color: #1a1c17;
 }
 
+.home-shell {
+  padding-bottom: var(--bottom-nav-space);
+  background: var(--ink);
+}
+
+.home-shell :where(a, button, [tabindex]) {
+  scroll-margin-bottom: calc(var(--bottom-nav-space) + 1rem);
+}
+
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 100;
+  padding: 1rem;
+  background: var(--ink);
+  color: var(--cream);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 .hero {
   position: relative;
   width: 100%;
@@ -91,13 +117,24 @@ textarea:focus-visible {
   z-index: -3;
   width: 100%;
   height: 100%;
+  pointer-events: none;
 }
 
 .hero__photo {
-  background-position: 62% center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% center;
   filter: saturate(0.88) contrast(1.06) brightness(0.82);
+}
+
+.hero__photo--incoming {
+  animation: hero-crossfade var(--hero-fade-duration) ease-in-out both;
+}
+
+@keyframes hero-crossfade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .hero__overlay {
@@ -199,7 +236,7 @@ textarea:focus-visible {
   position: absolute;
   z-index: 9;
   top: 17%;
-  bottom: 84px; /* Integrated from old overlap fix */
+  bottom: var(--bottom-nav-space);
   left: 0;
   width: clamp(11.5rem, 15vw, 14.5rem);
   padding: 7rem 0 0 var(--page-padding);
@@ -214,26 +251,66 @@ textarea:focus-visible {
   background: var(--blush);
 }
 
-.side-menu nav {
+.service-selector {
   display: flex;
   flex-direction: column;
-  gap: 2.3rem;
+  gap: 1.3rem;
 }
 
-.side-menu a {
+.service-selector button {
+  position: relative;
   width: fit-content;
+  min-height: 44px;
+  padding: 0.5rem 0;
+  border: 0;
+  background: transparent;
   color: var(--cream-muted);
   font-size: clamp(0.9rem, 1.1vw, 1.02rem);
-  transition:
-    color 180ms ease,
-    transform 180ms ease;
+  transition: color 180ms ease;
 }
 
-.side-menu a:hover,
-.side-menu a:focus-visible,
-.side-menu a.is-active {
+.service-selector button:hover,
+.service-selector button:focus-visible,
+.service-selector button[aria-pressed="true"] {
   color: var(--blush);
-  transform: translateX(0.35rem);
+}
+
+.service-selector button::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 1.5rem;
+  height: 1px;
+  background: var(--blush);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.service-selector button[aria-pressed="true"]::after {
+  opacity: 1;
+}
+
+.background-toggle {
+  display: block;
+  max-width: 100%;
+  min-height: 44px;
+  margin-top: 2rem;
+  padding: 0.5rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--cream-muted);
+  font-size: 0.65rem;
+  text-align: left;
+}
+
+.background-toggle:hover {
+  color: var(--blush);
+}
+
+.background-toggle:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 .hero__content {
@@ -280,6 +357,10 @@ textarea:focus-visible {
   line-height: 1.55;
 }
 
+.hero__copy .no-break {
+  white-space: nowrap;
+}
+
 .hero__actions {
   display: flex;
   flex-direction: column;
@@ -315,6 +396,10 @@ textarea:focus-visible {
   filter: brightness(1.05);
 }
 
+.home-shell .primary-button {
+  color: var(--ink);
+}
+
 .text-link {
   display: inline-flex;
   align-items: center;
@@ -336,6 +421,15 @@ textarea:focus-visible {
 .text-link:focus-visible {
   border-color: var(--blush);
   color: var(--blush);
+}
+
+.text-link svg {
+  width: 2rem;
+  height: 1rem;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
 }
 
 .category-label {
@@ -373,7 +467,7 @@ textarea:focus-visible {
   position: absolute;
   z-index: 7;
   right: var(--page-padding);
-  bottom: 108px; /* Integrated from old overlap fix */
+  bottom: calc(var(--bottom-nav-space) + 1.5rem);
   display: grid;
   grid-template-columns: 3.3rem 1fr;
   align-items: center;
@@ -400,8 +494,8 @@ textarea:focus-visible {
 }
 
 .bottom-nav {
-  position: absolute;
-  z-index: 8;
+  position: fixed;
+  z-index: 40;
   right: 0;
   bottom: 0;
   left: 0;
@@ -409,10 +503,10 @@ textarea:focus-visible {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   align-items: center;
-  height: 84px;
-  padding: 0 5%;
+  height: var(--bottom-nav-space);
+  padding: 0 max(5%, env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) max(5%, env(safe-area-inset-left, 0px));
   border-top: 1px solid var(--line);
-  background: rgba(9, 11, 7, 0.65);
+  background: rgba(9, 11, 7, 0.94);
   backdrop-filter: blur(12px);
 }
 
@@ -443,6 +537,10 @@ textarea:focus-visible {
 .bottom-nav a:hover,
 .bottom-nav a:focus-visible {
   color: var(--blush);
+}
+
+.bottom-nav a:focus-visible {
+  outline-offset: -6px;
 }
 
 .grid-line {
@@ -481,15 +579,12 @@ textarea:focus-visible {
 
 /* RESPONSIVE MEDIA QUERIES */
 @media (max-width: 1100px) and (min-width: 761px) {
-  .hero__photo {
-    background-position: 65% center;
-  }
   .side-menu {
     width: 11.5rem;
     padding-left: 2rem;
   }
   .hero__content {
-    width: min(31rem, calc(100vw - 30rem));
+    width: min(31rem, calc(100vw - 15rem));
     max-width: none;
     margin-left: 12.5rem;
     padding-top: 9rem;
@@ -502,13 +597,25 @@ textarea:focus-visible {
     top: 18%;
     right: 2rem;
   }
+  .hero__content {
+    padding-bottom: calc(var(--bottom-nav-space) + 12rem);
+  }
   .availability-card {
     right: 2rem;
     width: 17rem;
   }
 }
 
+@media (min-width: 761px) and (max-width: 900px) {
+  .category-label {
+    display: none;
+  }
+}
+
 @media (max-width: 760px) {
+  :root {
+    --bottom-nav-height: 68px;
+  }
   .hero__overlay {
     background:
       linear-gradient(
@@ -560,29 +667,30 @@ textarea:focus-visible {
   }
 
   .side-menu {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: auto;
-    z-index: 20;
-    width: min(84vw, 22rem);
-    padding: 8rem 2.2rem 2rem;
+    position: relative;
+    top: auto;
+    bottom: auto;
+    width: auto;
+    margin: 6rem var(--page-padding) 0;
+    padding: 0;
     border: 0;
-    background: rgba(10, 12, 8, 0.97);
-    backdrop-filter: blur(18px);
-    transform: translateX(100%);
-    transition: transform 220ms ease;
   }
-  .side-menu--open {
-    transform: translateX(0);
+  .side-menu__accent {
+    display: none;
+  }
+  .service-selector {
+    flex-direction: row;
+    gap: 2rem;
+  }
+  .background-toggle {
+    margin-top: 0.25rem;
   }
 
   .hero__content {
     width: auto;
     max-width: 100%;
     margin: 0;
-    padding: clamp(8.5rem, 18vh, 11rem) var(--page-padding) 14rem;
+    padding: 2rem var(--page-padding) 2.5rem;
   }
   .hero h1 {
     width: 100%;
@@ -591,9 +699,6 @@ textarea:focus-visible {
     line-height: 0.75;
   }
 
-  .desktop-break {
-    display: none;
-  }
   .primary-button {
     width: 100%;
     min-width: 0;
@@ -610,21 +715,28 @@ textarea:focus-visible {
   }
 
   .availability-card {
-    right: var(--page-padding);
-    bottom: 6.4rem;
-    left: var(--page-padding);
+    position: relative;
+    right: auto;
+    bottom: auto;
+    left: auto;
     width: auto;
+    margin: 0 var(--page-padding) calc(var(--bottom-nav-space) + 1.5rem);
+    padding: 1.2rem;
   }
 
   .bottom-nav {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.3rem;
-    padding: 1rem;
+    grid-template-columns: 1fr 0.95fr 0.95fr 1.35fr 1fr;
+    padding-right: max(0.25rem, env(safe-area-inset-right, 0px));
+    padding-left: max(0.25rem, env(safe-area-inset-left, 0px));
   }
-  .bottom-nav a:nth-child(2),
-  .bottom-nav a:nth-child(3),
+  .bottom-nav a {
+    min-width: 0;
+    font-size: clamp(0.58rem, 2.2vw, 0.67rem);
+    letter-spacing: 0.015em;
+  }
   .bottom-nav a::after {
-    display: none;
+    height: 1rem;
+    opacity: 0.55;
   }
 }
 
@@ -633,5 +745,7 @@ textarea:focus-visible {
   *::before,
   *::after {
     transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

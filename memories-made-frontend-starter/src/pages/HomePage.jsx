@@ -1,16 +1,15 @@
-import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import heroBackground from "../assets/hero-background.jpg";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Brand from "../components/Brand";
 import PrimaryButton from "../components/PrimaryButton";
 import Footer from "../components/Footer";
+import HeroBackground from "../components/HeroBackground";
+import { getBackgrounds } from "../data/serviceBackgrounds";
+import useReducedMotion from "../hooks/useReducedMotion";
 
-const sideNavigation = [
-  ["Weddings", "/weddings"],
-  ["Debuts", "/debuts"],
-  ["Packages", "/packages"],
-  ["Booking", "/booking"],
-  ["Gallery", "/gallery"],
+const services = [
+  ["Weddings", "weddings"],
+  ["Debuts", "debuts"],
 ];
 const bottomNavigation = [
   ["Packages", "/packages"],
@@ -37,48 +36,63 @@ function ArrowIcon() {
 }
 
 export default function HomePage() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [selection, setSelection] = useState({ service: "weddings" });
+  const [paused, setPaused] = useState(false);
+  const reducedMotion = useReducedMotion();
+  const canRotate = getBackgrounds(selection.service).length > 1;
+  const hasRotatingCollections = services.some(
+    ([, service]) => getBackgrounds(service).length > 1,
+  );
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
-    <div className="site-shell">
-      <main>
+    <div className="site-shell home-shell">
+      <a className="skip-link" href="#home-content">
+        Skip to content
+      </a>
+      <main id="home-content" tabIndex={-1}>
         <section className="hero">
-          <div className="hero__background" aria-hidden="true">
-            <div
-              className="hero__photo"
-              style={{ backgroundImage: `url(${heroBackground})` }}
-            />
-            <div className="hero__overlay" />
-            <div className="hero__grain" />
-          </div>
+          <HeroBackground
+            selection={selection}
+            paused={paused}
+            reducedMotion={reducedMotion}
+          />
           <header className="topbar">
             <Link className="season" to="/">
               2026 <span>/</span> Booking Season
             </Link>
-            <button
-              className="menu-toggle"
-              type="button"
-              aria-label="Toggle navigation"
-              aria-expanded={menuOpen}
-              aria-controls="home-navigation"
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
-              <span />
-              <span />
-            </button>
             <Brand />
           </header>
-          <aside
-            id="home-navigation"
-            className={`side-menu${menuOpen ? " side-menu--open" : ""}`}
-          >
+          <aside className="side-menu" aria-label="Event services">
             <span className="side-menu__accent" aria-hidden="true" />
-            <nav aria-label="Primary navigation">
-              {sideNavigation.map(([label, to]) => (
-                <NavLink key={to} to={to} onClick={() => setMenuOpen(false)}>
+            <div
+              className="service-selector"
+              role="group"
+              aria-label="Choose an event service"
+            >
+              {services.map(([label, service]) => (
+                <button
+                  key={service}
+                  type="button"
+                  aria-pressed={selection.service === service}
+                  onClick={() => setSelection({ service })}
+                >
                   {label}
-                </NavLink>
+                </button>
               ))}
-            </nav>
+            </div>
+            {hasRotatingCollections && !reducedMotion && (
+              <button
+                className="background-toggle"
+                type="button"
+                onClick={() => setPaused((value) => !value)}
+                aria-pressed={paused}
+                disabled={!canRotate}
+              >
+                {paused ? "Resume backgrounds" : "Pause backgrounds"}
+              </button>
+            )}
           </aside>
           <div className="hero__content">
             <p className="eyebrow">Wedding &amp; Debut Planning</p>
@@ -92,8 +106,8 @@ export default function HomePage() {
               Planned
             </h1>
             <p className="hero__copy">
-              A booking and planning experience for weddings and debuts—
-              <br className="desktop-break" /> from inquiry to celebration.
+              A booking and planning experience for weddings and{" "}
+              <span className="no-break">debuts—</span> from inquiry to celebration.
             </p>
             <div className="hero__actions">
               <PrimaryButton to="/booking">Book Your Date</PrimaryButton>
@@ -111,13 +125,6 @@ export default function HomePage() {
             <CalendarIcon />
             <p>Select a preferred date and include it in your event inquiry.</p>
           </Link>
-          <nav className="bottom-nav" aria-label="More pages">
-            {bottomNavigation.map(([label, to]) => (
-              <Link key={to} to={to}>
-                {label}
-              </Link>
-            ))}
-          </nav>
           <span className="grid-line grid-line--one" aria-hidden="true" />
           <span className="grid-line grid-line--two" aria-hidden="true" />
           <span className="grid-line grid-line--three" aria-hidden="true" />
@@ -168,6 +175,13 @@ export default function HomePage() {
         </section>
       </main>
       <Footer />
+      <nav className="bottom-nav" aria-label="Primary navigation">
+        {bottomNavigation.map(([label, to]) => (
+          <Link key={to} to={to}>
+            {label}
+          </Link>
+        ))}
+      </nav>
     </div>
   );
 }
