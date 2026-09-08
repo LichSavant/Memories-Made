@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import HeroBackground from "../components/HeroBackground";
 import { getBackgrounds } from "../data/serviceBackgrounds";
 import useReducedMotion from "../hooks/useReducedMotion";
+import useSectionReveal from "../hooks/useSectionReveal";
 
 const services = [
   ["Weddings", "weddings"],
@@ -50,6 +51,7 @@ export default function HomePage() {
   const [slideIndex, setSlideIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const reducedMotion = useReducedMotion();
+  const mainRef = useSectionReveal(reducedMotion);
   const backgrounds = getBackgrounds(selection.service);
   const canRotate = backgrounds.length > 1;
   const activeContent = serviceContent[selection.service];
@@ -60,11 +62,11 @@ export default function HomePage() {
     window.scrollTo(0, 0);
   }, []);
   return (
-    <div className="site-shell home-shell">
+    <div className="site-shell home-shell" data-service={selection.service}>
       <a className="skip-link" href="#home-content">
         Skip to content
       </a>
-      <main id="home-content" tabIndex={-1}>
+      <main id="home-content" ref={mainRef} tabIndex={-1}>
         <section className="hero">
           <HeroBackground
             selection={selection}
@@ -151,7 +153,7 @@ export default function HomePage() {
           <span className="grid-line grid-line--two" aria-hidden="true" />
           <span className="grid-line grid-line--three" aria-hidden="true" />
         </section>
-        <section className="home-intro content-section">
+        <section className="home-intro content-section reveal-section" data-reveal>
           <div>
             <p className="section-kicker">Celebrations with intention</p>
             <h2>Wedding and debut experiences shaped around you.</h2>
@@ -166,7 +168,7 @@ export default function HomePage() {
             <Link to="/debuts">Explore Debuts</Link>
           </div>
         </section>
-        <section className="home-preview content-section">
+        <section className="home-preview content-section reveal-section" data-reveal>
           <div>
             <p className="section-kicker">A thoughtful journey</p>
             <h2>Clear planning, beautifully paced.</h2>
@@ -190,7 +192,7 @@ export default function HomePage() {
             </Link>
           </div>
         </section>
-        <section className="home-booking content-section">
+        <section className="home-booking content-section reveal-section" data-reveal>
           <p className="section-kicker">Begin your inquiry</p>
           <h2>Let’s plan a celebration that feels entirely yours.</h2>
           <PrimaryButton to="/booking">Book Your Date</PrimaryButton>
