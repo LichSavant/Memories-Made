@@ -35,13 +35,12 @@ The homepage service buttons select a background collection without navigating.
 The fixed bottom bar contains the five primary destinations; the existing
 wedding/debut detail pages remain reachable from the introduction below the hero.
 
-Add local photos to `src/assets/` and import them in
-`src/data/serviceBackgrounds.js`. Replace each `null` slot with an object like
-`{ src: importedPhoto, position: "62% center" }`; add more entries as needed.
-There are four slots per service. Additional wedding and debut photos are pending
-from the owner, so empty slots are skipped and Enchanted-Wedding remains the
-fallback. The original PNG is retained; the homepage uses a 476 KB JPEG at the
-same 1536 × 1024 resolution.
+The homepage has four local backgrounds for each service. Temporary assets live
+in `src/assets/placeholders/` and use clear `wedding-01` through `wedding-04`
+and `debut-01` through `debut-04` filenames. Replace those files in place later,
+or update their imports and focal positions in `src/data/serviceBackgrounds.js`.
+The collection contains no empty slots, and the first wedding image remains the
+safe fallback for an unknown service.
 
 Collections with two or more photos rotate after a five-second hold, followed
 by a 1.5-second crossfade. The foreground does not animate. Only the next image

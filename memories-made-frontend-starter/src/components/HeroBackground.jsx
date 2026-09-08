@@ -20,7 +20,12 @@ function loadImage(src) {
   return loadedImages.get(src);
 }
 
-export default function HeroBackground({ selection, paused, reducedMotion }) {
+export default function HeroBackground({
+  selection,
+  paused,
+  reducedMotion,
+  onSlideChange,
+}) {
   const [current, setCurrent] = useState(() => ({
     selection,
     index: 0,
@@ -34,6 +39,10 @@ export default function HeroBackground({ selection, paused, reducedMotion }) {
     document.addEventListener("visibilitychange", update);
     return () => document.removeEventListener("visibilitychange", update);
   }, []);
+
+  useEffect(() => {
+    onSlideChange(current.index);
+  }, [current.index, current.selection.service, onSlideChange]);
 
   // Finish an in-progress fade before responding to another selection. Rapid
   // clicks coalesce to the latest selection without clearing a visible layer.

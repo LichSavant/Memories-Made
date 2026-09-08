@@ -11,6 +11,16 @@ const services = [
   ["Weddings", "weddings"],
   ["Debuts", "debuts"],
 ];
+const serviceContent = {
+  weddings: {
+    eyebrow: "Premium Wedding Planning",
+    category: "Weddings",
+  },
+  debuts: {
+    eyebrow: "Signature Debut Planning",
+    category: "Debuts",
+  },
+};
 const bottomNavigation = [
   ["Packages", "/packages"],
   ["Process", "/process"],
@@ -37,9 +47,12 @@ function ArrowIcon() {
 
 export default function HomePage() {
   const [selection, setSelection] = useState({ service: "weddings" });
+  const [slideIndex, setSlideIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const reducedMotion = useReducedMotion();
-  const canRotate = getBackgrounds(selection.service).length > 1;
+  const backgrounds = getBackgrounds(selection.service);
+  const canRotate = backgrounds.length > 1;
+  const activeContent = serviceContent[selection.service];
   const hasRotatingCollections = services.some(
     ([, service]) => getBackgrounds(service).length > 1,
   );
@@ -57,6 +70,7 @@ export default function HomePage() {
             selection={selection}
             paused={paused}
             reducedMotion={reducedMotion}
+            onSlideChange={setSlideIndex}
           />
           <header className="topbar">
             <Link className="season" to="/">
@@ -76,7 +90,10 @@ export default function HomePage() {
                   key={service}
                   type="button"
                   aria-pressed={selection.service === service}
-                  onClick={() => setSelection({ service })}
+                  onClick={() => {
+                    setSlideIndex(0);
+                    setSelection({ service });
+                  }}
                 >
                   {label}
                 </button>
@@ -93,9 +110,14 @@ export default function HomePage() {
                 {paused ? "Resume backgrounds" : "Pause backgrounds"}
               </button>
             )}
+            <p className="carousel-progress" aria-hidden="true">
+              <span>{String(slideIndex + 1).padStart(2, "0")}</span>
+              <i aria-hidden="true" />
+              <span>{String(backgrounds.length).padStart(2, "0")}</span>
+            </p>
           </aside>
           <div className="hero__content">
-            <p className="eyebrow">Wedding &amp; Debut Planning</p>
+            <p className="eyebrow">{activeContent.eyebrow}</p>
             <h1>
               Beautiful
               <br />
@@ -119,7 +141,7 @@ export default function HomePage() {
           </div>
           <div className="category-label">
             <span>Premium Event Booking</span>
-            <strong>Wedding / Debut</strong>
+            <strong>{activeContent.category}</strong>
           </div>
           <Link className="availability-card" to="/availability">
             <CalendarIcon />
