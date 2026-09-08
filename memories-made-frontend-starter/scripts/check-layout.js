@@ -5,6 +5,7 @@
   const before = nav.getBoundingClientRect();
   const availability = rect(".availability-card");
   const links = [...nav.querySelectorAll("a")];
+  const ambient = getComputedStyle(document.querySelector(".home-shell"), "::before");
   const checks = {
     noHorizontalOverflow: document.documentElement.scrollWidth === innerWidth,
     fiveVisibleDestinations: links.length === 5 && links.every((link) => link.getBoundingClientRect().width > 0),
@@ -15,6 +16,8 @@
     ctaInsideHero: rect(".hero__actions").right <= innerWidth && rect(".hero__actions").bottom <= rect(".hero").bottom,
     ctaAndAvailabilityDoNotOverlap: rect(".hero__actions").bottom <= rect(".availability-card").top || rect(".hero__actions").right <= rect(".availability-card").left,
     visibleAvailabilityClearsNav: availability.top >= innerHeight || availability.bottom <= before.top,
+    ambientIsFixed: ambient.position === "fixed",
+    ambientDoesNotBlockClicks: ambient.pointerEvents === "none",
   };
   const previousScroll = scrollY;
   window.scrollTo(0, document.documentElement.scrollHeight);

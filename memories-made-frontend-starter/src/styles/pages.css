@@ -97,6 +97,24 @@
   color: var(--cream);
 }
 
+.home-shell .content-section {
+  position: relative;
+  background: rgba(13, 16, 10, 0.9);
+}
+
+.reveal-section {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition:
+    opacity 700ms ease,
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-section.is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
 .section-heading {
   display: grid;
   grid-template-columns: minmax(10rem, 1fr) 2fr;
@@ -610,7 +628,7 @@ textarea {
 }
 .home-preview > div {
   padding: clamp(3rem, 7vw, 7rem) var(--page-padding);
-  background: var(--ink-soft);
+  background: rgba(20, 23, 15, 0.92);
 }
 .home-preview .text-link {
   margin: 2rem 0 0;
@@ -789,5 +807,10 @@ textarea {
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
     scroll-behavior: auto;
+  }
+
+  .reveal-section {
+    opacity: 1;
+    transform: none;
   }
 }

@@ -71,8 +71,62 @@ textarea:focus-visible {
 }
 
 .home-shell {
+  --ambient-blush-opacity: 0.42;
+  --hero-service-glow: rgba(217, 141, 140, 0.13);
+  position: relative;
+  isolation: isolate;
   padding-bottom: var(--bottom-nav-space);
   background: var(--ink);
+}
+
+.home-shell[data-service="debuts"] {
+  --ambient-blush-opacity: 0.52;
+  --hero-service-glow: rgba(185, 110, 112, 0.17);
+}
+
+.home-shell::before,
+.home-shell::after {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.home-shell::before {
+  inset: -18vmax;
+  background:
+    radial-gradient(circle at 82% 18%, rgba(217, 141, 140, 0.19), transparent 30%),
+    radial-gradient(circle at 18% 78%, rgba(99, 48, 53, 0.2), transparent 34%);
+  opacity: var(--ambient-blush-opacity);
+  transform: translate3d(-1%, 0, 0) scale(1.02);
+  animation: ambient-drift 26s ease-in-out infinite alternate;
+  transition: opacity 1.2s ease;
+  will-change: transform, opacity;
+}
+
+.home-shell::after {
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(245, 238, 228, 0.055), transparent 25%),
+    linear-gradient(180deg, transparent 25%, rgba(8, 9, 6, 0.26) 100%);
+  opacity: 0.8;
+}
+
+.home-shell > main,
+.home-shell > .site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes ambient-drift {
+  from {
+    transform: translate3d(-1%, 0, 0) scale(1.02);
+    opacity: 0.37;
+  }
+  to {
+    transform: translate3d(1%, -1%, 0) scale(1.04);
+    opacity: var(--ambient-blush-opacity);
+  }
 }
 
 .home-shell :where(a, button, [tabindex]) {
@@ -126,6 +180,7 @@ textarea:focus-visible {
   object-fit: cover;
   object-position: 62% center;
   filter: saturate(0.88) contrast(1.06) brightness(0.82);
+  transform: scale(1.012);
 }
 
 .hero__photo--incoming {
@@ -140,25 +195,35 @@ textarea:focus-visible {
 .hero__overlay {
   background:
     linear-gradient(
+      180deg,
+      rgba(7, 9, 6, 0.38) 0%,
+      transparent 24%,
+      transparent 64%,
+      rgba(7, 9, 6, 0.82) 100%
+    ),
+    linear-gradient(
       90deg,
       rgba(9, 12, 7, 0.98) 0%,
       rgba(9, 12, 7, 0.94) 20%,
       rgba(9, 12, 7, 0.78) 39%,
       rgba(9, 12, 7, 0.26) 67%,
-      rgba(9, 12, 7, 0.42) 100%
+      rgba(9, 12, 7, 0.4) 100%
     ),
-    linear-gradient(
-      0deg,
-      rgba(8, 10, 6, 0.9) 0%,
-      transparent 32%,
-      rgba(8, 10, 6, 0.16) 100%
-    );
+    radial-gradient(circle at 70% 42%, var(--hero-service-glow), transparent 43%);
 }
 
 .hero__grain {
-  opacity: 0.17;
+  inset: -4%;
+  opacity: 0.12;
   mix-blend-mode: soft-light;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");
+  animation: grain-drift 24s steps(2, end) infinite alternate;
+  will-change: transform;
+}
+
+@keyframes grain-drift {
+  from { transform: translate3d(-0.35%, -0.25%, 0); }
+  to { transform: translate3d(0.35%, 0.25%, 0); }
 }
 
 /* UI COMPONENTS */
@@ -388,6 +453,7 @@ textarea:focus-visible {
 }
 
 .primary-button {
+  position: relative;
   display: inline-grid;
   place-items: center;
   min-width: 18rem;
@@ -404,14 +470,18 @@ textarea:focus-visible {
   letter-spacing: 0.24em;
   text-transform: uppercase;
   transition:
-    transform 180ms ease,
-    filter 180ms ease;
+    transform 240ms ease,
+    filter 240ms ease,
+    box-shadow 240ms ease;
 }
 
 .primary-button:hover,
 .primary-button:focus-visible {
-  transform: translateY(-2px);
-  filter: brightness(1.05);
+  transform: translateY(-2px) scale(1.01);
+  filter: brightness(1.045);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.28),
+    0 1.25rem 3.25rem rgba(0, 0, 0, 0.25);
 }
 
 .home-shell .primary-button {
@@ -448,6 +518,12 @@ textarea:focus-visible {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.4;
+  transition: transform 240ms ease;
+}
+
+.text-link:hover svg,
+.text-link:focus-visible svg {
+  transform: translate3d(4px, 0, 0);
 }
 
 .category-label {
@@ -523,9 +599,13 @@ textarea:focus-visible {
   align-items: center;
   height: var(--bottom-nav-space);
   padding: 0 max(5%, env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) max(5%, env(safe-area-inset-left, 0px));
-  border-top: 1px solid var(--line);
-  background: rgba(9, 11, 7, 0.94);
+  border-top: 1px solid rgba(245, 238, 228, 0.22);
+  background: linear-gradient(180deg, rgba(17, 19, 13, 0.91), rgba(7, 9, 6, 0.97));
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    inset 0 1px rgba(217, 141, 140, 0.07),
+    0 -1.25rem 2.75rem rgba(5, 6, 4, 0.28);
 }
 
 .bottom-nav a {
@@ -643,7 +723,14 @@ textarea:focus-visible {
         rgba(8, 10, 6, 0.96) 72%,
         #080a06 100%
       ),
-      linear-gradient(90deg, rgba(8, 10, 6, 0.73), rgba(8, 10, 6, 0.1));
+      linear-gradient(90deg, rgba(8, 10, 6, 0.73), rgba(8, 10, 6, 0.1)),
+      radial-gradient(circle at 70% 28%, var(--hero-service-glow), transparent 38%);
+  }
+  .home-shell::before {
+    --ambient-blush-opacity: 0.3;
+  }
+  .home-shell[data-service="debuts"]::before {
+    --ambient-blush-opacity: 0.37;
   }
   .topbar {
     align-items: center;
@@ -768,5 +855,12 @@ textarea:focus-visible {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  .home-shell::before,
+  .hero__grain,
+  .hero__photo,
+  .reveal-section {
+    transform: none !important;
   }
 }
