@@ -313,6 +313,24 @@ textarea:focus-visible {
   cursor: default;
 }
 
+.carousel-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 5.25rem;
+  margin: 1.25rem 0 0;
+  color: var(--cream-muted);
+  font-size: 0.6rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.12em;
+}
+
+.carousel-progress i {
+  height: 1px;
+  flex: 1;
+  background: rgba(217, 141, 140, 0.72);
+}
+
 .hero__content {
   position: relative;
   z-index: 5;
@@ -467,7 +485,7 @@ textarea:focus-visible {
   position: absolute;
   z-index: 7;
   right: var(--page-padding);
-  bottom: calc(var(--bottom-nav-space) + 1.5rem);
+  bottom: calc(100% - 100dvh + var(--bottom-nav-space) + 1.5rem);
   display: grid;
   grid-template-columns: 3.3rem 1fr;
   align-items: center;
@@ -671,7 +689,7 @@ textarea:focus-visible {
     top: auto;
     bottom: auto;
     width: auto;
-    margin: 6rem var(--page-padding) 0;
+    margin: 5.25rem var(--page-padding) 0;
     padding: 0;
     border: 0;
   }
@@ -684,6 +702,9 @@ textarea:focus-visible {
   }
   .background-toggle {
     margin-top: 0.25rem;
+  }
+  .carousel-progress {
+    margin-top: 0.4rem;
   }
 
   .hero__content {

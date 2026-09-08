@@ -3,6 +3,7 @@
   const rect = (selector) => document.querySelector(selector).getBoundingClientRect();
   const nav = document.querySelector(".bottom-nav");
   const before = nav.getBoundingClientRect();
+  const availability = rect(".availability-card");
   const links = [...nav.querySelectorAll("a")];
   const checks = {
     noHorizontalOverflow: document.documentElement.scrollWidth === innerWidth,
@@ -13,6 +14,7 @@
     photoLoaded: document.querySelector(".hero__photo").naturalWidth > 0,
     ctaInsideHero: rect(".hero__actions").right <= innerWidth && rect(".hero__actions").bottom <= rect(".hero").bottom,
     ctaAndAvailabilityDoNotOverlap: rect(".hero__actions").bottom <= rect(".availability-card").top || rect(".hero__actions").right <= rect(".availability-card").left,
+    visibleAvailabilityClearsNav: availability.top >= innerHeight || availability.bottom <= before.top,
   };
   const previousScroll = scrollY;
   window.scrollTo(0, document.documentElement.scrollHeight);
