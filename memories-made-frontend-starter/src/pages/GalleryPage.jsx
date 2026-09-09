@@ -42,11 +42,8 @@ export default function GalleryPage() {
           {shown.length} {shown.length === 1 ? "image" : "images"} · {filter}
         </p>
         <div className="gallery-grid">
-          {shown.map((item, index) => (
-            <figure
-              className={`gallery-item gallery-item--${index % 3}`}
-              key={item.id}
-            >
+          {shown.map((item) => (
+            <figure className="gallery-item" key={item.id}>
               <CelebrationImage item={item} />
               <figcaption>
                 <span>{item.type}</span>
