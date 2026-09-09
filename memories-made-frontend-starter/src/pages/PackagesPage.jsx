@@ -1,35 +1,8 @@
+import { Link } from "react-router-dom";
 import PageHero from "../components/PageHero";
 import PrimaryButton from "../components/PrimaryButton";
-const names = ["Essential", "Signature", "Bespoke"];
-const inclusions = [
-  "Planning consultation",
-  "Coordination",
-  "Styling direction",
-  "Event-day support",
-];
-function PackageGroup({ title }) {
-  return (
-    <section className="content-section package-group">
-      <h2>{title}</h2>
-      <div className="card-grid">
-        {names.map((name, i) => (
-          <article className="package-card" key={name}>
-            <span>0{i + 1}</span>
-            <h3>{name}</h3>
-            <p className="quote-label">
-              Custom quotation based on event requirements
-            </p>
-            <ul>
-              {inclusions.slice(0, i + 2).map((x) => (
-                <li key={x}>{x}</li>
-              ))}
-            </ul>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
+import { packages } from "../data/packages";
+
 export default function PackagesPage() {
   return (
     <>
@@ -37,14 +10,58 @@ export default function PackagesPage() {
         label="Planning Packages"
         title="A considered starting point for every celebration."
       >
-        Explore flexible levels of planning support for weddings and debuts.
-        Every proposal is tailored to the event.
+        Planning support for weddings and debuts, with room to make it personal.
+        These starting points guide your inquiry; final inclusions and pricing
+        are confirmed in your proposal.
       </PageHero>
-      <PackageGroup title="Wedding Packages" />
-      <PackageGroup title="Debut Packages" />
+      <section
+        className="content-section package-group reveal-section"
+        data-reveal
+      >
+        <p className="section-kicker">Weddings &amp; debuts</p>
+        <h2>Find your level of support.</h2>
+        <div className="card-grid">
+          {packages.map((item, index) => (
+            <article className="package-card" key={item.name}>
+              <span>0{index + 1} / Planning support</span>
+              <h3>{item.name}</h3>
+              <p>{item.audience}</p>
+              <p className="quote-label">Custom quotation</p>
+              <ul aria-label={`${item.name} starting inclusions`}>
+                {item.inclusions.map((value) => (
+                  <li key={value}>{value}</li>
+                ))}
+              </ul>
+              <p className="form-note">
+                Customizable to your event. Scope confirmed with your proposal.
+              </p>
+              <Link className="text-link" to={`/booking?package=${item.name}`}>
+                Inquire about {item.name} <span aria-hidden="true">→</span>
+              </Link>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section
+        className="content-section editorial-note reveal-section"
+        data-reveal
+      >
+        <p className="section-kicker">Made to fit</p>
+        <h2>Something a little different?</h2>
+        <p>
+          Share your plans for reception styling, a prenup setting, or a
+          customized event. We can discuss the details and shape the support
+          around your brief.
+        </p>
+      </section>
       <section className="cta-section">
-        <h2>Receive a proposal shaped around your event.</h2>
-        <PrimaryButton to="/booking">Request a Custom Proposal</PrimaryButton>
+        <h2>Let’s shape your celebration.</h2>
+        <div className="cta-links">
+          <PrimaryButton to="/booking">Start Your Inquiry</PrimaryButton>
+          <Link className="text-link" to="/availability">
+            Check Availability
+          </Link>
+        </div>
       </section>
     </>
   );

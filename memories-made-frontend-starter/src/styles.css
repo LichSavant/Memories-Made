@@ -1,17 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,500&family=Inter:wght@300;400;500;600&display=swap");
 
 :root {
-  --ink: #0d100a;
-  --ink-soft: #14170f;
-  --cream: #f5eee4;
-  --cream-muted: #d9cec1;
-  --blush: #d98d8c;
-  --blush-deep: #b96e70;
-  --champagne: #cbb59b;
-  --line: rgba(245, 238, 228, 0.34);
+  --ink: #171211;
+  --ink-soft: #211a18;
+  --cream: #f5eee5;
+  --cream-muted: #d5c7bb;
+  --blush: #ce9b94;
+  --blush-deep: #b7827c;
+  --champagne: #d2b899;
+  --line: rgba(245, 238, 228, 0.19);
   --page-padding: clamp(1.4rem, 4vw, 4rem);
   --bottom-nav-height: 84px;
-  --bottom-nav-space: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+  --bottom-nav-space: calc(
+    var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px)
+  );
   color: var(--cream);
   font-family: "Inter", Arial, sans-serif;
   font-synthesis: none;
@@ -66,8 +68,9 @@ textarea:focus-visible {
 .site-shell {
   width: 100%;
   min-height: 100vh;
-  background: #f1e8df;
-  color: #1a1c17;
+  padding-bottom: var(--bottom-nav-space);
+  background: var(--ink);
+  color: var(--cream);
 }
 
 .home-shell {
@@ -75,7 +78,6 @@ textarea:focus-visible {
   --hero-service-glow: rgba(217, 141, 140, 0.13);
   position: relative;
   isolation: isolate;
-  padding-bottom: var(--bottom-nav-space);
   background: var(--ink);
 }
 
@@ -95,7 +97,11 @@ textarea:focus-visible {
 .home-shell::before {
   inset: -18vmax;
   background:
-    radial-gradient(circle at 82% 18%, rgba(217, 141, 140, 0.19), transparent 30%),
+    radial-gradient(
+      circle at 82% 18%,
+      rgba(217, 141, 140, 0.19),
+      transparent 30%
+    ),
     radial-gradient(circle at 18% 78%, rgba(99, 48, 53, 0.2), transparent 34%);
   opacity: var(--ambient-blush-opacity);
   transform: translate3d(-1%, 0, 0) scale(1.02);
@@ -107,8 +113,12 @@ textarea:focus-visible {
 .home-shell::after {
   inset: 0;
   background:
-    radial-gradient(circle at 12% 10%, rgba(245, 238, 228, 0.055), transparent 25%),
-    linear-gradient(180deg, transparent 25%, rgba(8, 9, 6, 0.26) 100%);
+    radial-gradient(
+      circle at 12% 10%,
+      rgba(245, 238, 228, 0.055),
+      transparent 25%
+    ),
+    linear-gradient(180deg, transparent 25%, rgba(19, 13, 11, 0.26) 100%);
   opacity: 0.8;
 }
 
@@ -129,7 +139,7 @@ textarea:focus-visible {
   }
 }
 
-.home-shell :where(a, button, [tabindex]) {
+.site-shell :where(a, button, input, select, textarea, [tabindex]) {
   scroll-margin-bottom: calc(var(--bottom-nav-space) + 1rem);
 }
 
@@ -188,28 +198,36 @@ textarea:focus-visible {
 }
 
 @keyframes hero-crossfade {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .hero__overlay {
   background:
     linear-gradient(
       180deg,
-      rgba(7, 9, 6, 0.38) 0%,
+      rgba(18, 12, 11, 0.38) 0%,
       transparent 24%,
       transparent 64%,
-      rgba(7, 9, 6, 0.82) 100%
+      rgba(18, 12, 11, 0.82) 100%
     ),
     linear-gradient(
       90deg,
-      rgba(9, 12, 7, 0.98) 0%,
-      rgba(9, 12, 7, 0.94) 20%,
-      rgba(9, 12, 7, 0.78) 39%,
-      rgba(9, 12, 7, 0.26) 67%,
-      rgba(9, 12, 7, 0.4) 100%
+      rgba(20, 14, 12, 0.98) 0%,
+      rgba(20, 14, 12, 0.94) 20%,
+      rgba(20, 14, 12, 0.78) 39%,
+      rgba(20, 14, 12, 0.26) 67%,
+      rgba(20, 14, 12, 0.4) 100%
     ),
-    radial-gradient(circle at 70% 42%, var(--hero-service-glow), transparent 43%);
+    radial-gradient(
+      circle at 70% 42%,
+      var(--hero-service-glow),
+      transparent 43%
+    );
 }
 
 .hero__grain {
@@ -222,8 +240,12 @@ textarea:focus-visible {
 }
 
 @keyframes grain-drift {
-  from { transform: translate3d(-0.35%, -0.25%, 0); }
-  to { transform: translate3d(0.35%, 0.25%, 0); }
+  from {
+    transform: translate3d(-0.35%, -0.25%, 0);
+  }
+  to {
+    transform: translate3d(0.35%, 0.25%, 0);
+  }
 }
 
 /* UI COMPONENTS */
@@ -463,7 +485,7 @@ textarea:focus-visible {
   background: linear-gradient(135deg, var(--blush), var(--blush-deep));
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.19);
   text-align: center;
-  color: #fff9f2;
+  color: var(--ink);
   font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.2;
@@ -477,15 +499,11 @@ textarea:focus-visible {
 
 .primary-button:hover,
 .primary-button:focus-visible {
-  transform: translateY(-2px) scale(1.01);
+  transform: translateY(-2px);
   filter: brightness(1.045);
   box-shadow:
     inset 0 1px rgba(255, 255, 255, 0.28),
     0 1.25rem 3.25rem rgba(0, 0, 0, 0.25);
-}
-
-.home-shell .primary-button {
-  color: var(--ink);
 }
 
 .text-link {
@@ -493,6 +511,8 @@ textarea:focus-visible {
   align-items: center;
   gap: 0.9rem;
   margin-left: 2rem;
+  min-height: 44px;
+  padding-top: 0.65rem;
   padding-bottom: 0.45rem;
   border-bottom: 1px solid rgba(217, 141, 140, 0.65);
   color: var(--cream);
@@ -569,7 +589,7 @@ textarea:focus-visible {
   width: min(23rem, 29vw);
   padding: 1.5rem 1.7rem;
   border: 1px solid rgba(217, 141, 140, 0.62);
-  background: rgba(12, 14, 9, 0.69);
+  background: rgba(28, 20, 18, 0.69);
   backdrop-filter: blur(14px);
 }
 
@@ -590,55 +610,112 @@ textarea:focus-visible {
 .bottom-nav {
   position: fixed;
   z-index: 40;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  align-items: center;
+  inset: auto 0 0;
   height: var(--bottom-nav-space);
-  padding: 0 max(5%, env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) max(5%, env(safe-area-inset-left, 0px));
-  border-top: 1px solid rgba(245, 238, 228, 0.22);
-  background: linear-gradient(180deg, rgba(17, 19, 13, 0.91), rgba(7, 9, 6, 0.97));
+  padding: 0 var(--page-padding) env(safe-area-inset-bottom, 0px);
+  border-top: 1px solid var(--line);
+  background: linear-gradient(
+    180deg,
+    rgba(31, 24, 22, 0.96),
+    rgba(20, 15, 14, 0.98)
+  );
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow:
-    inset 0 1px rgba(217, 141, 140, 0.07),
-    0 -1.25rem 2.75rem rgba(5, 6, 4, 0.28);
+    inset 0 1px rgba(245, 238, 228, 0.04),
+    0 -10px 36px rgba(0, 0, 0, 0.18);
 }
-
-.bottom-nav a {
-  position: relative;
+.desktop-navigation {
   display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) minmax(12rem, 1.5fr);
   height: 100%;
-  place-items: center;
-  text-align: center;
-  color: var(--cream-muted);
-  font-size: 0.67rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  transition: color 180ms ease;
+  align-items: center;
 }
-
-.bottom-nav a:not(:last-child)::after {
+.bottom-nav :where(a, button) {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0.8rem 0.65rem;
+  border: 0;
+  background: transparent;
+  color: var(--cream-muted);
+  text-align: center;
+  font-size: 0.67rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 220ms ease;
+}
+.bottom-nav :where(a, button)::after {
   content: "";
   position: absolute;
-  top: 50%;
-  right: 0;
-  width: 1px;
-  height: 1.5rem;
+  bottom: 4px;
+  left: 24%;
+  right: 24%;
+  height: 1px;
   background: var(--blush);
-  transform: translateY(-50%);
+  transform: scaleX(0);
+  transition: transform 220ms ease;
 }
-
-.bottom-nav a:hover,
-.bottom-nav a:focus-visible {
+.bottom-nav
+  :where(a, button):is(
+    :hover,
+    :focus-visible,
+    .is-active,
+    [aria-current="page"],
+    [aria-expanded="true"]
+  ) {
   color: var(--blush);
 }
-
-.bottom-nav a:focus-visible {
-  outline-offset: -6px;
+.bottom-nav
+  :where(a, button):is(
+    :hover,
+    :focus-visible,
+    .is-active,
+    [aria-current="page"],
+    [aria-expanded="true"]
+  )::after {
+  transform: scaleX(1);
+}
+.bottom-nav :where(a, button):focus-visible {
+  outline-offset: -3px;
+}
+.bottom-nav .nav-booking {
+  margin-left: 1rem;
+  border: 1px solid rgba(206, 155, 148, 0.5);
+  color: var(--cream);
+  background: rgba(183, 130, 124, 0.09);
+}
+.services-menu {
+  position: relative;
+}
+.services-menu > button {
+  width: 100%;
+}
+.services-panel,
+.mobile-navigation-panel {
+  position: absolute;
+  bottom: calc(100% + 1px);
+  background: #211a18;
+  border: 1px solid var(--line);
+  box-shadow: 0 -16px 48px rgba(0, 0, 0, 0.24);
+}
+.services-panel {
+  width: 13rem;
+  padding: 0.75rem;
+  left: 0;
+}
+.services-panel a {
+  justify-content: flex-start;
+}
+.mobile-navigation,
+.mobile-navigation-panel {
+  display: none;
+}
+[hidden] {
+  display: none !important;
 }
 
 .grid-line {
@@ -669,10 +746,6 @@ textarea:focus-visible {
   left: 60%;
   height: 1px;
   opacity: 0.35;
-}
-
-.menu-toggle {
-  display: none;
 }
 
 /* RESPONSIVE MEDIA QUERIES */
@@ -711,20 +784,21 @@ textarea:focus-visible {
 }
 
 @media (max-width: 760px) {
-  :root {
-    --bottom-nav-height: 68px;
-  }
   .hero__overlay {
     background:
       linear-gradient(
         180deg,
-        rgba(8, 10, 6, 0.46) 0%,
-        rgba(8, 10, 6, 0.68) 30%,
-        rgba(8, 10, 6, 0.96) 72%,
-        #080a06 100%
+        rgba(20, 14, 12, 0.46) 0%,
+        rgba(20, 14, 12, 0.68) 30%,
+        rgba(20, 14, 12, 0.96) 72%,
+        #171211 100%
       ),
-      linear-gradient(90deg, rgba(8, 10, 6, 0.73), rgba(8, 10, 6, 0.1)),
-      radial-gradient(circle at 70% 28%, var(--hero-service-glow), transparent 38%);
+      linear-gradient(90deg, rgba(20, 14, 12, 0.73), rgba(20, 14, 12, 0.1)),
+      radial-gradient(
+        circle at 70% 28%,
+        var(--hero-service-glow),
+        transparent 38%
+      );
   }
   .home-shell::before {
     --ambient-blush-opacity: 0.3;
@@ -754,24 +828,10 @@ textarea:focus-visible {
     font-size: 0.52rem;
   }
 
-  .menu-toggle {
-    position: relative;
-    z-index: 30;
-    display: grid;
-    gap: 0.42rem;
-    width: 2.8rem;
-    height: 2.8rem;
-    place-content: center;
-    border: 1px solid rgba(245, 238, 228, 0.28);
-    background: rgba(8, 10, 6, 0.4);
-  }
-  .menu-toggle span {
-    width: 1.3rem;
-    height: 1px;
-    background: var(--cream);
-  }
-
   .side-menu {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
     position: relative;
     top: auto;
     bottom: auto;
@@ -784,6 +844,7 @@ textarea:focus-visible {
     display: none;
   }
   .service-selector {
+    grid-column: 1 / -1;
     flex-direction: row;
     gap: 2rem;
   }
@@ -791,14 +852,14 @@ textarea:focus-visible {
     margin-top: 0.25rem;
   }
   .carousel-progress {
-    margin-top: 0.4rem;
+    margin: 0;
   }
 
   .hero__content {
     width: auto;
     max-width: 100%;
     margin: 0;
-    padding: 2rem var(--page-padding) 2.5rem;
+    padding: 1.5rem var(--page-padding) 1.5rem;
   }
   .hero h1 {
     width: 100%;
@@ -831,21 +892,6 @@ textarea:focus-visible {
     margin: 0 var(--page-padding) calc(var(--bottom-nav-space) + 1.5rem);
     padding: 1.2rem;
   }
-
-  .bottom-nav {
-    grid-template-columns: 1fr 0.95fr 0.95fr 1.35fr 1fr;
-    padding-right: max(0.25rem, env(safe-area-inset-right, 0px));
-    padding-left: max(0.25rem, env(safe-area-inset-left, 0px));
-  }
-  .bottom-nav a {
-    min-width: 0;
-    font-size: clamp(0.58rem, 2.2vw, 0.67rem);
-    letter-spacing: 0.015em;
-  }
-  .bottom-nav a::after {
-    height: 1rem;
-    opacity: 0.55;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -862,5 +908,61 @@ textarea:focus-visible {
   .hero__photo,
   .reveal-section {
     transform: none !important;
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --bottom-nav-height: 68px;
+  }
+  .bottom-nav {
+    padding-inline: max(0.75rem, env(safe-area-inset-left, 0px));
+  }
+  .desktop-navigation {
+    display: none;
+  }
+  .mobile-navigation {
+    display: grid;
+    grid-template-columns: 0.8fr 0.8fr 1.8fr;
+    height: 100%;
+    align-items: center;
+  }
+  .mobile-navigation a,
+  .mobile-navigation button {
+    font-size: 0.65rem;
+    letter-spacing: 0.07em;
+  }
+  .bottom-nav .nav-booking {
+    margin-left: 0.5rem;
+  }
+  .mobile-navigation-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem 1rem;
+    inset-inline: 0;
+    max-height: calc(100dvh - var(--bottom-nav-space) - 1rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 1.5rem var(--page-padding);
+  }
+  .mobile-navigation-panel > .section-kicker {
+    grid-column: 1 / -1;
+    margin-bottom: 0.5rem;
+  }
+  .mobile-navigation-panel a {
+    justify-content: flex-start;
+    border-bottom: 1px solid var(--line);
+  }
+  .mobile-services {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1rem;
+  }
+  .mobile-services > span {
+    grid-column: 1 / -1;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 1.5rem;
+    padding: 0.5rem 0;
   }
 }

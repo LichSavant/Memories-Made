@@ -1,79 +1,55 @@
-# Memories Made Wedding & Events — Frontend Starter
+# Memories Made Weddings & Events
 
-This starter recreates the approved premium landing-page direction as a real
-React + Vite frontend.
-
-## Included
-
-- Responsive editorial hero section
-- Desktop service selector and inline mobile service buttons
-- Fixed primary navigation with all five destinations available on mobile
-- Wedding/debut branding
-- Primary booking and package CTAs
-- Availability information card
-- Starter content sections for the next screens
-- Local Enchanted-Wedding hero with service-specific carousel support
+React/Vite frontend for Memories Made Events Organizing Services. The existing photographic hero, editorial typography, and service-aware carousel are preserved.
 
 ## Run locally
 
-```bash
+```sh
 npm install
 npm run dev
+npm run build
 ```
 
-Open the local URL shown by Vite.
+On Windows, use `npm.cmd` if PowerShell blocks the npm script.
 
-## Main files
+## Page flow and shared systems
 
-- `src/App.jsx` — page structure and navigation
-- `src/styles.css` — complete visual styling and responsive behavior
-- `src/assets/Enchanted-Wedding.jpg` — optimized hero image asset
+- Home: hero → photographic service discovery → curated gallery preview → process and package introductions → temporary client-feedback area → availability/inquiry CTA → structured footer.
+- `SiteNavigation` shares the same destination hierarchy across every page. Desktop uses the fixed bottom bar with a small Services disclosure; widths up to 900px use Home / Menu / Start Your Inquiry. Both disclosures close on Escape, outside click, focus leaving navigation, or navigation. Closed panels are absent from keyboard navigation.
+- `useSectionReveal` reuses IntersectionObserver for 20px/700ms section reveals and 650ms image settling. Reduced motion disables movement; content is visible if the observer is unavailable. Keyboard focus reveals its containing section.
+- `serviceBackgrounds` remains the single source for the four wedding and four debut hero photos. The five-second hold, 1.5-second cinematic crossfade, pause/resume, visibility handling, failed-image fallback, and rapid-switch handling are unchanged.
+- `celebrations` selects three existing local images for the public preview and functional All / Weddings / Debuts / Styling filters. No additional image downloads or application dependencies were introduced.
+- `packages` shares the existing Essential / Signature / Bespoke starting points between package discovery and the inquiry form.
 
-## Landing-page backgrounds
+## Availability and inquiry
 
-The homepage service buttons select a background collection without navigating.
-The fixed bottom bar contains the five primary destinations; the existing
-wedding/debut detail pages remain reachable from the introduction below the hero.
+Availability collects a preferred date and time, carried to `/booking` in URL parameters. It is not a live availability feed. Month navigation retains the entire selected date. Past dates are disabled.
 
-The homepage has four local backgrounds for each service. Temporary assets live
-in `src/assets/placeholders/` and use clear `wedding-01` through `wedding-04`
-and `debut-01` through `debut-04` filenames. Replace those files in place later,
-or update their imports and focal positions in `src/data/serviceBackgrounds.js`.
-The collection contains no empty slots, and the first wedding image remains the
-safe fallback for an unknown service.
+Package links preselect a package; wedding/debut inquiry links preselect the event type. The multi-step form validates required details, dates, and guest counts, then shows an editable review. Enter cannot skip required steps.
 
-Collections with two or more photos rotate after a five-second hold, followed
-by a 1.5-second crossfade. The foreground does not animate. Only the next image
-is preloaded; failed loads retain the visible image. Rapid selections finish
-the current fade, then use the latest service selection. Selecting a service
-again resets its collection. A pause/resume control appears when photos can
-rotate, hidden tabs stop scheduling rotation, and reduced motion disables
-autoplay and fades while preserving service selection.
+**Booking and contact prepare drafts only. They do not send data or reserve dates.** Drafts remain in component memory and are lost when leaving/reloading the page. The interface states this limitation. No backend, account system, payment flow, or speculative contact destination has been added.
 
-## Verification
+## Content awaiting approval
 
-Run `npm.cmd install` and `npm.cmd run build` on Windows (`npm` on other systems).
-No lint or test runner dependency is configured. Browser regression scripts in
-`scripts/` can be run against `npm.cmd run dev` using the standalone
-`agent-browser` CLI (not an application dependency):
+All existing service images are documented as temporary assets in `src/assets/placeholders/`. The gallery and home preview explicitly label them as inspiration pending approved Memories Made photography. Replace the assets and update captions/credits in `src/data/celebrations.js` when approved content is available. Do not remove the preview note until then.
+
+There is no verified local testimonial dataset or contact/social-link dataset. The client-feedback section is explicitly temporary and contains no quotes, ratings, or client counts. Package names and base inclusions are inherited from the starter; final business-approved scopes and prices must be confirmed before launch.
+
+## Browser regression checks
+
+No lint script or unit-test runner is configured. The browser checks use the standalone `agent-browser` CLI, not an application dependency, against the Vite dev server:
 
 ```powershell
 npx.cmd --yes agent-browser open http://127.0.0.1:5173
 Get-Content -Raw scripts/check-layout.js | npx.cmd --yes agent-browser eval --stdin
+Get-Content -Raw scripts/check-routes.js | npx.cmd --yes agent-browser eval --stdin
+Get-Content -Raw scripts/check-flow.js | npx.cmd --yes agent-browser eval --stdin
 Get-Content -Raw scripts/check-carousel.js | npx.cmd --yes agent-browser eval --stdin
 npx.cmd --yes agent-browser set media reduced-motion
 Get-Content -Raw scripts/check-carousel.js | npx.cmd --yes agent-browser eval --stdin
-npx.cmd --yes agent-browser set media light
-Get-Content -Raw scripts/check-routes.js | npx.cmd --yes agent-browser eval --stdin
+npx.cmd --yes agent-browser close
 ```
 
-Run the layout check at desktop, laptop, tablet, and mobile viewport sizes using
-`agent-browser set viewport WIDTH HEIGHT`. Carousel checks temporarily populate
-collections in browser memory with fixture URLs for existing local images and
-restore the original data afterward. They do not fill the pending photo slots
-in the repository. Reload the page after checks to reset all browser state.
+Run layout and route checks at 1440×1000, 1366×768, 1024×768, 768×1024, 430×932, and 390×844 via `agent-browser set viewport WIDTH HEIGHT`. Start with the homepage and closed navigation panels. Carousel checks temporarily replace collections in browser memory with local fixture URLs, then restore them. Reload after testing to reset the page.
 
-## Recommended next frontend screen
-
-Build the interactive **Packages and Date Availability** page next, followed by
-the multi-step booking form.
+See [QA.md](QA.md) for the feature-branch validation record and remaining launch prerequisites.

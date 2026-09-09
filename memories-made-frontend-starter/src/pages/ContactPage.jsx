@@ -25,17 +25,26 @@ export default function ContactPage() {
     <>
       <PageHero label="Contact" title="Tell us what you are planning.">
         Share a few details about your celebration and the support you are
-        looking for.
+        looking for. Online sending is not available yet; you can prepare a
+        message here.
       </PageHero>
       <section className="content-section contact-wrap">
         {done ? (
-          <div className="success-panel">
+          <div className="success-panel" role="status">
             <p className="section-kicker">Message Prepared</p>
             <h2>Thank you, {data.name}.</h2>
             <p>
-              Your message is ready for submission. Connect this form to the
-              backend before production.
+              Your message has been prepared on this page. Nothing has been
+              sent.
             </p>
+            <p className="prepared-message">{data.message}</p>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => setDone(false)}
+            >
+              Edit Message
+            </button>
           </div>
         ) : (
           <form className="contact-form" onSubmit={submit} noValidate>

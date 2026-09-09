@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import PrimaryButton from "../components/PrimaryButton";
 import PageHero from "../components/PageHero";
 const steps = [
   [
@@ -10,7 +12,7 @@ const steps = [
   ],
   [
     "Proposal and Reservation",
-    "A tailored proposal outlines the recommended direction and next steps.",
+    "A tailored proposal outlines the scope and next steps. Your preferred date becomes a reservation only after confirmation by the team.",
   ],
   [
     "Planning and Coordination",
@@ -34,7 +36,7 @@ export default function ProcessPage() {
       <section className="content-section">
         <ol className="timeline">
           {steps.map(([h, p], i) => (
-            <li key={h}>
+            <li key={h} className="reveal-section" data-reveal>
               <span>0{i + 1}</span>
               <div>
                 <h2>{h}</h2>
@@ -43,6 +45,15 @@ export default function ProcessPage() {
             </li>
           ))}
         </ol>
+      </section>
+      <section className="cta-section">
+        <h2>Every celebration starts with a conversation.</h2>
+        <div className="cta-links">
+          <PrimaryButton to="/booking">Start Your Inquiry</PrimaryButton>
+          <Link className="text-link" to="/availability">
+            Check Availability
+          </Link>
+        </div>
       </section>
     </>
   );
