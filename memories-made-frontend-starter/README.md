@@ -53,3 +53,23 @@ npx.cmd --yes agent-browser close
 Run layout and route checks at 1440×1000, 1366×768, 1024×768, 768×1024, 430×932, and 390×844 via `agent-browser set viewport WIDTH HEIGHT`. Start with the homepage and closed navigation panels. Carousel checks temporarily replace collections in browser memory with local fixture URLs, then restore them. Reload after testing to reset the page.
 
 See [QA.md](QA.md) for the feature-branch validation record and remaining launch prerequisites.
+
+## Layout symmetry
+
+Content sections, page heroes, headers, footer, and bottom navigation share the
+`--content-max-width` (75rem) and `--content-gutter` container rule. Backgrounds
+remain full bleed. `--section-gap` controls vertical section padding and
+`--grid-gap` controls the major column gaps. The hero retains a separate 90rem
+composition with a shared rail/gutter calculation to preserve its asymmetric
+layout on wide screens.
+
+Featured photos use aligned equal columns. Gallery images use three columns on
+desktop, two on tablet with a full-width final odd item, and one on mobile.
+Filters retain the same data and behavior. Hover/focus highlights photo borders;
+it never changes image scale or crop. Non-hover image reveals and hero motion
+remain enabled, respecting reduced motion.
+
+Run `scripts/check-symmetry.js` through `agent-browser eval --stdin` on the
+homepage to check all nine pages at the current viewport. It checks shared
+gutters, section/form edges, matching image rows, and content overflow.
+See [LAYOUT-QA.md](LAYOUT-QA.md) for the layout cleanup validation record.
