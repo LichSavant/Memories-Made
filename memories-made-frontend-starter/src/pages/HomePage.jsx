@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import Brand from "../components/Brand";
 import PrimaryButton from "../components/PrimaryButton";
 import Footer from "../components/Footer";
+import SiteNavigation from "../components/SiteNavigation";
+import CelebrationImage from "../components/CelebrationImage";
+import { celebrations, portfolioNote } from "../data/celebrations";
 import HeroBackground from "../components/HeroBackground";
 import { getBackgrounds } from "../data/serviceBackgrounds";
 import useReducedMotion from "../hooks/useReducedMotion";
@@ -22,14 +25,6 @@ const serviceContent = {
     category: "Debuts",
   },
 };
-const bottomNavigation = [
-  ["Packages", "/packages"],
-  ["Process", "/process"],
-  ["Gallery", "/gallery"],
-  ["Availability", "/availability"],
-  ["Contact", "/contact"],
-];
-
 function CalendarIcon() {
   return (
     <svg viewBox="0 0 48 48" aria-hidden="true">
@@ -76,7 +71,7 @@ export default function HomePage() {
           />
           <header className="topbar">
             <Link className="season" to="/">
-              2026 <span>/</span> Booking Season
+              {new Date().getFullYear()} <span>/</span> Booking Season
             </Link>
             <Brand />
           </header>
@@ -130,11 +125,11 @@ export default function HomePage() {
               Planned
             </h1>
             <p className="hero__copy">
-              A booking and planning experience for weddings and{" "}
-              <span className="no-break">debuts—</span> from inquiry to celebration.
+              Memories Made Events Organizing Services. Personal planning and
+              styling for weddings, debuts, and the moments in between.
             </p>
             <div className="hero__actions">
-              <PrimaryButton to="/booking">Book Your Date</PrimaryButton>
+              <PrimaryButton to="/booking">Start Your Inquiry</PrimaryButton>
               <Link className="text-link" to="/packages">
                 Explore Packages
                 <ArrowIcon />
@@ -142,33 +137,107 @@ export default function HomePage() {
             </div>
           </div>
           <div className="category-label">
-            <span>Premium Event Booking</span>
+            <span>Thoughtfully planned</span>
             <strong>{activeContent.category}</strong>
           </div>
           <Link className="availability-card" to="/availability">
             <CalendarIcon />
-            <p>Select a preferred date and include it in your event inquiry.</p>
+            <p>
+              <strong>Check Availability</strong>Select a preferred date for the
+              team to confirm.
+            </p>
           </Link>
           <span className="grid-line grid-line--one" aria-hidden="true" />
           <span className="grid-line grid-line--two" aria-hidden="true" />
           <span className="grid-line grid-line--three" aria-hidden="true" />
         </section>
-        <section className="home-intro content-section reveal-section" data-reveal>
+        <section
+          className="home-intro content-section reveal-section"
+          data-reveal
+        >
           <div>
             <p className="section-kicker">Celebrations with intention</p>
-            <h2>Wedding and debut experiences shaped around you.</h2>
+            <h2>For your once-in-a-lifetime moments.</h2>
           </div>
           <p>
-            From the first conversation to the final celebration, each detail is
-            considered with care, clarity, and a distinctly personal point of
-            view.
+            From intimate ceremonies to full-scale celebrations, we bring
+            planning, coordination, and styling together around what matters to
+            you.
           </p>
-          <div className="home-links">
-            <Link to="/weddings">Explore Weddings</Link>
-            <Link to="/debuts">Explore Debuts</Link>
+          <div className="service-stories">
+            {celebrations.slice(0, 2).map((item, index) => (
+              <article className="service-story" key={item.id}>
+                <Link
+                  className="service-story__image"
+                  to={index === 0 ? "/weddings" : "/debuts"}
+                  aria-label={`Explore ${item.type}`}
+                >
+                  <CelebrationImage item={item} />
+                </Link>
+                <div className="service-story__copy">
+                  <span className="section-kicker">
+                    0{index + 1} / {item.type}
+                  </span>
+                  <h3>
+                    {index === 0
+                      ? "Your story, beautifully celebrated."
+                      : "A milestone that feels like you."}
+                  </h3>
+                  <p>
+                    {index === 0
+                      ? "From intimate ceremonies to full-scale celebrations."
+                      : "Elegant milestone celebrations shaped around the celebrant."}
+                  </p>
+                  <Link
+                    className="text-link"
+                    to={index === 0 ? "/weddings" : "/debuts"}
+                  >
+                    Explore {item.type} <ArrowIcon />
+                  </Link>
+                </div>
+              </article>
+            ))}
           </div>
+          <p className="service-scope">
+            Reception &amp; event styling · Prenup styling · Customized
+            celebrations
+          </p>
+          <Link className="text-link" to="/contact">
+            Discuss your vision <ArrowIcon />
+          </Link>
         </section>
-        <section className="home-preview content-section reveal-section" data-reveal>
+        <section
+          className="home-featured content-section reveal-section"
+          data-reveal
+        >
+          <div className="section-topline">
+            <div>
+              <p className="section-kicker">Featured celebrations / Preview</p>
+              <h2>A feeling, in every detail.</h2>
+            </div>
+            <Link className="text-link" to="/gallery">
+              View Gallery <ArrowIcon />
+            </Link>
+          </div>
+          <div className="featured-grid">
+            {[celebrations[0], celebrations[2]].map((item) => (
+              <figure key={item.id}>
+                <Link to="/gallery" aria-label={`View gallery: ${item.label}`}>
+                  <CelebrationImage item={item} />
+                </Link>
+                <figcaption>
+                  <span>{item.type}</span>
+                  {item.label}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          <p className="form-note">{portfolioNote}</p>
+        </section>
+        <section
+          className="home-preview content-section reveal-section"
+          data-reveal
+        >
           <div>
             <p className="section-kicker">A thoughtful journey</p>
             <h2>Clear planning, beautifully paced.</h2>
@@ -177,35 +246,52 @@ export default function HomePage() {
               one considered step at a time.
             </p>
             <Link className="text-link" to="/process">
-              View Our Process <ArrowIcon />
+              Our Process <ArrowIcon />
             </Link>
           </div>
           <div>
             <p className="section-kicker">Featured packages</p>
             <h2>Support that meets your celebration.</h2>
             <p>
-              Choose an Essential, Signature, or Bespoke starting point, with a
-              custom quotation based on your requirements.
+              Explore our Essential, Signature, and Bespoke planning starting
+              points, with a custom quotation based on your requirements.
             </p>
             <Link className="text-link" to="/packages">
               Explore Packages <ArrowIcon />
             </Link>
           </div>
         </section>
-        <section className="home-booking content-section reveal-section" data-reveal>
+        <section
+          className="home-feedback content-section editorial-note reveal-section"
+          data-reveal
+        >
+          <p className="section-kicker">Client feedback / Coming soon</p>
+          <h2>The stories after the celebration.</h2>
+          <p>
+            We are preparing this space for verified client feedback. Approved
+            stories will be shared here soon.
+          </p>
+        </section>
+        <section
+          className="home-booking content-section reveal-section"
+          data-reveal
+        >
           <p className="section-kicker">Begin your inquiry</p>
           <h2>Let’s plan a celebration that feels entirely yours.</h2>
-          <PrimaryButton to="/booking">Book Your Date</PrimaryButton>
+          <p className="booking-copy">
+            Have a date in mind? Choose your preference, then tell us about your
+            plans. The team confirms availability before a reservation.
+          </p>
+          <div className="booking-actions">
+            <PrimaryButton to="/booking">Start Your Inquiry</PrimaryButton>
+            <Link className="text-link" to="/availability">
+              Check Availability <ArrowIcon />
+            </Link>
+          </div>
         </section>
       </main>
       <Footer />
-      <nav className="bottom-nav" aria-label="Primary navigation">
-        {bottomNavigation.map(([label, to]) => (
-          <Link key={to} to={to}>
-            {label}
-          </Link>
-        ))}
-      </nav>
+      <SiteNavigation />
     </div>
   );
 }

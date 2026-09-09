@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import CelebrationImage from "../components/CelebrationImage";
+import { celebrations } from "../data/celebrations";
 import PageHero from "../components/PageHero";
 import SectionHeading from "../components/SectionHeading";
 import PrimaryButton from "../components/PrimaryButton";
@@ -25,7 +28,16 @@ export default function WeddingsPage() {
         We shape a clear, considered planning experience around your priorities,
         style, and vision for the day.
       </PageHero>
-      <section className="content-section">
+      <section
+        className="content-section service-overview reveal-section"
+        data-reveal
+      >
+        <figure className="service-detail-photo">
+          <CelebrationImage item={celebrations[0]} />
+          <figcaption className="form-note">
+            Inspiration preview · Approved event photography coming soon.
+          </figcaption>
+        </figure>
         <SectionHeading label="Planning support">
           Choose the level of guidance your celebration needs.
         </SectionHeading>
@@ -39,7 +51,10 @@ export default function WeddingsPage() {
           ))}
         </div>
       </section>
-      <section className="content-section split-section">
+      <section
+        className="content-section split-section reveal-section"
+        data-reveal
+      >
         <SectionHeading label="The journey">
           From first conversation to celebration.
         </SectionHeading>
@@ -69,7 +84,14 @@ export default function WeddingsPage() {
       </section>
       <section className="cta-section">
         <h2>Begin planning your wedding.</h2>
-        <PrimaryButton to="/booking">Start an Inquiry</PrimaryButton>
+        <div className="cta-links">
+          <PrimaryButton to="/booking?eventType=Wedding">
+            Start Your Inquiry
+          </PrimaryButton>
+          <Link className="text-link" to="/packages">
+            Explore Packages
+          </Link>
+        </div>
       </section>
     </>
   );

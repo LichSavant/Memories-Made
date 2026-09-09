@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { packages } from "../data/packages";
+import { isFutureOrToday, localDateValue } from "../data/eventDate";
 import PageHero from "../components/PageHero";
 const initial = {
   eventType: "",
   date: "",
   alternativeDate: "",
+  period: "",
   venue: "",
   guests: "",
   package: "",
@@ -20,17 +24,46 @@ const steps = [
   "Review",
 ];
 export default function BookingPage() {
+  const [params] = useSearchParams();
+  const formRef = useRef(null);
   const [step, setStep] = useState(0),
-    [data, setData] = useState(initial),
+    [data, setData] = useState(() => ({
+      ...initial,
+      date: isFutureOrToday(params.get("date")) ? params.get("date") : "",
+      period: ["Morning", "Afternoon", "Evening"].includes(params.get("period"))
+        ? params.get("period")
+        : "",
+      package: packages.some((item) => item.name === params.get("package"))
+        ? params.get("package")
+        : "",
+      eventType: ["Wedding", "Debut"].includes(params.get("eventType"))
+        ? params.get("eventType")
+        : "",
+    })),
     [errors, setErrors] = useState({}),
     [submitted, setSubmitted] = useState(false);
+  useEffect(() => {
+    formRef.current?.querySelector("legend")?.focus();
+  }, [step]);
   const change = (e) => setData({ ...data, [e.target.name]: e.target.value });
   const validate = () => {
     const next = {};
     if (step === 0 && !data.eventType) next.eventType = "Choose an event type.";
-    if (step === 1 && !data.date) next.date = "Choose a preferred date.";
-    if (step === 2 && !data.package)
-      next.package = "Choose a preferred package.";
+    if (step === 1) {
+      if (!isFutureOrToday(data.date))
+        next.date = "Choose today or a future date.";
+      if (data.alternativeDate && !isFutureOrToday(data.alternativeDate))
+        next.alternativeDate = "Choose today or a future date.";
+    }
+    if (step === 2) {
+      if (!data.package)
+        next.package = "Choose a package or let us help you decide.";
+      if (
+        data.guests &&
+        (!Number.isInteger(Number(data.guests)) || Number(data.guests) < 1)
+      )
+        next.guests = "Enter a whole number of guests, at least 1.";
+    }
     if (step === 3) {
       if (!data.name.trim()) next.name = "Enter your full name.";
       if (!/^\S+@\S+\.\S+$/.test(data.email))
@@ -41,32 +74,15 @@ export default function BookingPage() {
     return !Object.keys(next).length;
   };
   const next = () => validate() && setStep((s) => s + 1);
-  if (submitted)
-    return (
-      <>
-        <PageHero
-          label="Inquiry Prepared"
-          title="Thank you for sharing your celebration plans."
-        >
-          Your inquiry has been prepared. Final date confirmation will be
-          provided by Memories Made after review.
-        </PageHero>
-        <section className="content-section editorial-note">
-          <p>
-            This is a frontend inquiry flow. Connect it to the business backend
-            before production submission.
-          </p>
-        </section>
-      </>
-    );
   return (
     <>
       <PageHero
         label="Booking Inquiry"
         title="Begin with the details that matter most."
       >
-        This frontend form prepares an inquiry only. A preferred date is not
-        officially reserved until the Memories Made team confirms it.
+        Prepare your event details in a few simple steps. Online sending is not
+        available yet; this creates a draft only. Your date is reserved only
+        after the team confirms it.
       </PageHero>
       <section className="content-section form-section">
         <ol className="progress-steps" aria-label="Booking progress">
@@ -75,52 +91,58 @@ export default function BookingPage() {
               className={
                 i === step ? "is-current" : i < step ? "is-complete" : ""
               }
+              aria-current={i === step ? "step" : undefined}
               key={s}
             >
               <span>{i + 1}</span>
-              {s}
+              <span className="progress-label">{s}</span>
             </li>
           ))}
         </ol>
         <form
           className="booking-form"
+          ref={formRef}
           onSubmit={(e) => {
             e.preventDefault();
-            setSubmitted(true);
+            if (step < 4) next();
+            else if (validate()) setSubmitted(true);
           }}
           noValidate
         >
           {step === 0 && (
             <fieldset>
-              <legend>What are you planning?</legend>
+              <legend tabIndex={-1}>What are you planning?</legend>
               <div className="choice-grid">
-                {["Wedding", "Debut"].map((v) => (
-                  <label className="choice-card" key={v}>
-                    <input
-                      type="radio"
-                      name="eventType"
-                      value={v}
-                      checked={data.eventType === v}
-                      onChange={change}
-                      aria-describedby={
-                        errors.eventType ? "eventType-error" : undefined
-                      }
-                    />
-                    <span>{v}</span>
-                  </label>
-                ))}
+                {["Wedding", "Debut", "Styling / Other celebration"].map(
+                  (v) => (
+                    <label className="choice-card" key={v}>
+                      <input
+                        type="radio"
+                        name="eventType"
+                        value={v}
+                        checked={data.eventType === v}
+                        onChange={change}
+                        aria-describedby={
+                          errors.eventType ? "eventType-error" : undefined
+                        }
+                      />
+                      <span>{v}</span>
+                    </label>
+                  ),
+                )}
               </div>
               <ErrorText id="eventType-error" text={errors.eventType} />
             </fieldset>
           )}
           {step === 1 && (
             <fieldset>
-              <legend>Which dates do you prefer?</legend>
+              <legend tabIndex={-1}>Which dates do you prefer?</legend>
               <div className="field-grid">
                 <Field
                   label="Preferred event date"
                   name="date"
                   type="date"
+                  min={localDateValue()}
                   value={data.date}
                   onChange={change}
                   error={errors.date}
@@ -129,15 +151,26 @@ export default function BookingPage() {
                   label="Alternative date"
                   name="alternativeDate"
                   type="date"
+                  min={localDateValue()}
+                  error={errors.alternativeDate}
                   value={data.alternativeDate}
                   onChange={change}
                 />
+                <label>
+                  Preferred time of day
+                  <select name="period" value={data.period} onChange={change}>
+                    <option value="">No preference</option>
+                    <option>Morning</option>
+                    <option>Afternoon</option>
+                    <option>Evening</option>
+                  </select>
+                </label>
               </div>
             </fieldset>
           )}
           {step === 2 && (
             <fieldset>
-              <legend>Tell us about the event.</legend>
+              <legend tabIndex={-1}>Tell us about the event.</legend>
               <div className="field-grid">
                 <Field
                   label="Venue, if selected"
@@ -150,6 +183,7 @@ export default function BookingPage() {
                   name="guests"
                   type="number"
                   min="1"
+                  error={errors.guests}
                   value={data.guests}
                   onChange={change}
                 />
@@ -165,9 +199,10 @@ export default function BookingPage() {
                     }
                   >
                     <option value="">Select one</option>
-                    <option>Essential</option>
-                    <option>Signature</option>
-                    <option>Bespoke</option>
+                    {packages.map((item) => (
+                      <option key={item.name}>{item.name}</option>
+                    ))}
+                    <option>Help me decide</option>
                   </select>
                   <ErrorText id="package-error" text={errors.package} />
                 </label>
@@ -180,7 +215,7 @@ export default function BookingPage() {
           )}
           {step === 3 && (
             <fieldset>
-              <legend>How may we contact you?</legend>
+              <legend tabIndex={-1}>How may we contact you?</legend>
               <div className="field-grid">
                 <Field
                   label="Client full name"
@@ -210,11 +245,12 @@ export default function BookingPage() {
           )}
           {step === 4 && (
             <fieldset>
-              <legend>Review your inquiry.</legend>
+              <legend tabIndex={-1}>Review your inquiry.</legend>
               <dl className="review-list">
                 {Object.entries({
                   "Event type": data.eventType,
                   "Preferred date": data.date,
+                  "Time of day": data.period || "No preference",
                   "Alternative date": data.alternativeDate || "Not provided",
                   Venue: data.venue || "Not provided",
                   "Guest count": data.guests || "Not provided",
@@ -231,17 +267,26 @@ export default function BookingPage() {
                 ))}
               </dl>
               <p className="form-note">
-                Submitting prepares this inquiry in the frontend; it does not
-                send data or reserve a date.
+                Preparing this draft does not send your details or reserve a
+                date. Keep this page open to retain your draft.
               </p>
             </fieldset>
+          )}
+          {submitted && (
+            <p className="draft-status" role="status">
+              Your draft is ready. Nothing has been sent and your date is not
+              reserved. You can go back to edit your details.
+            </p>
           )}
           <div className="form-actions">
             {step > 0 && (
               <button
                 className="secondary-button"
                 type="button"
-                onClick={() => setStep((s) => s - 1)}
+                onClick={() => {
+                  setSubmitted(false);
+                  setStep((s) => s - 1);
+                }}
               >
                 Back
               </button>

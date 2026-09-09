@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import PageHero from "../components/PageHero";
 import PrimaryButton from "../components/PrimaryButton";
+import { localDateValue } from "../data/eventDate";
 const months = [
     "January",
     "February",
@@ -32,12 +33,16 @@ export default function AvailabilityPage() {
   const move = (n) =>
     setView(new Date(view.getFullYear(), view.getMonth() + n, 1));
   const dateLabel = selected
-    ? `${months[view.getMonth()]} ${selected}, ${view.getFullYear()}`
+    ? selected.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
     : "No date selected";
   return (
     <>
       <PageHero
-        label="Preferred Date"
+        label="Check Availability"
         title="Choose a date to include in your inquiry."
       >
         This calendar collects your preference only. Final availability is
@@ -46,10 +51,17 @@ export default function AvailabilityPage() {
       <section className="content-section availability-layout">
         <div className="calendar">
           <header>
-            <button onClick={() => move(-1)} aria-label="Previous month">
+            <button
+              onClick={() => move(-1)}
+              aria-label="Previous month"
+              disabled={
+                view.getFullYear() === now.getFullYear() &&
+                view.getMonth() === now.getMonth()
+              }
+            >
               ←
             </button>
-            <h2>
+            <h2 aria-live="polite">
               {months[view.getMonth()]} {view.getFullYear()}
             </h2>
             <button onClick={() => move(1)} aria-label="Next month">
@@ -65,9 +77,27 @@ export default function AvailabilityPage() {
             {cells.map((d, i) =>
               d ? (
                 <button
-                  className={selected === d ? "is-selected" : ""}
-                  aria-pressed={selected === d}
-                  onClick={() => setSelected(d)}
+                  className={
+                    selected?.getTime() ===
+                    new Date(view.getFullYear(), view.getMonth(), d).getTime()
+                      ? "is-selected"
+                      : ""
+                  }
+                  aria-pressed={
+                    selected?.getTime() ===
+                    new Date(view.getFullYear(), view.getMonth(), d).getTime()
+                  }
+                  disabled={
+                    localDateValue(
+                      new Date(view.getFullYear(), view.getMonth(), d),
+                    ) < localDateValue(now)
+                  }
+                  aria-label={`${months[view.getMonth()]} ${d}, ${view.getFullYear()}`}
+                  onClick={() =>
+                    setSelected(
+                      new Date(view.getFullYear(), view.getMonth(), d),
+                    )
+                  }
                   key={i}
                 >
                   {d}
@@ -80,7 +110,7 @@ export default function AvailabilityPage() {
         </div>
         <aside className="date-summary">
           <p className="section-kicker">Your preference</p>
-          <h2>{dateLabel}</h2>
+          <h2 aria-live="polite">{dateLabel}</h2>
           <p>Select the time of day you prefer.</p>
           <div className="period-choices">
             {["Morning", "Afternoon", "Evening"].map((x) => (
@@ -97,7 +127,15 @@ export default function AvailabilityPage() {
           <p className="form-note">
             Final availability is confirmed by the Memories Made team.
           </p>
-          <PrimaryButton to="/booking">Continue to Booking</PrimaryButton>
+          <PrimaryButton
+            to={
+              selected
+                ? `/booking?date=${localDateValue(selected)}&period=${period}`
+                : "/booking"
+            }
+          >
+            Start Your Inquiry
+          </PrimaryButton>
         </aside>
       </section>
     </>

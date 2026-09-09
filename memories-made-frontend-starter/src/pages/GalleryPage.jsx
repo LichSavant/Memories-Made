@@ -1,63 +1,64 @@
 import { useState } from "react";
 import PageHero from "../components/PageHero";
-import hero from "../assets/hero-background.jpg";
-const items = [
-  { type: "Weddings", image: hero, alt: "Elegant floral event setting" },
-  { type: "Debuts", label: "A celebration in bloom" },
-  { type: "Weddings", label: "Considered details" },
-  { type: "Debuts", label: "A personal milestone" },
-  { type: "Weddings", label: "An intimate gathering" },
-  { type: "Debuts", label: "A memorable evening" },
-];
+import PrimaryButton from "../components/PrimaryButton";
+import CelebrationImage from "../components/CelebrationImage";
+import { celebrations, portfolioNote } from "../data/celebrations";
+
+const filters = ["All", ...new Set(celebrations.map((item) => item.type))];
 export default function GalleryPage() {
   const [filter, setFilter] = useState("All");
   const shown =
-    filter === "All" ? items : items.filter((x) => x.type === filter);
+    filter === "All"
+      ? celebrations
+      : celebrations.filter((item) => item.type === filter);
   return (
     <>
       <PageHero
-        label="Selected Celebrations"
+        label="Celebration Gallery / Preview"
         title="Moments shaped with intention."
       >
-        A restrained collection of wedding and debut inspiration.
+        Explore the mood, flowers, and thoughtful details behind a celebration.{" "}
+        {portfolioNote}
       </PageHero>
       <section className="content-section">
-        <div className="gallery-filters" aria-label="Gallery filters">
-          {["All", "Weddings", "Debuts"].map((x) => (
+        <div
+          className="gallery-filters"
+          role="group"
+          aria-label="Gallery filters"
+        >
+          {filters.map((value) => (
             <button
-              className={filter === x ? "is-active" : ""}
-              aria-pressed={filter === x}
-              onClick={() => setFilter(x)}
-              key={x}
+              type="button"
+              aria-pressed={filter === value}
+              className={filter === value ? "is-active" : ""}
+              onClick={() => setFilter(value)}
+              key={value}
             >
-              {x}
+              {value}
             </button>
           ))}
         </div>
+        <p className="form-note" role="status">
+          {shown.length} {shown.length === 1 ? "image" : "images"} · {filter}
+        </p>
         <div className="gallery-grid">
-          {shown.map((item, i) => (
+          {shown.map((item, index) => (
             <figure
-              className={`gallery-item gallery-item--${i % 3}`}
-              key={`${item.type}-${i}`}
+              className={`gallery-item gallery-item--${index % 3}`}
+              key={item.id}
             >
-              {item.image ? (
-                <img src={item.image} alt={item.alt} />
-              ) : (
-                <div
-                  className="gallery-placeholder"
-                  role="img"
-                  aria-label={`${item.type}: ${item.label}`}
-                >
-                  <span>✦</span>
-                </div>
-              )}
+              <CelebrationImage item={item} />
               <figcaption>
                 <span>{item.type}</span>
-                {item.label || "Floral celebration setting"}
+                {item.label}
               </figcaption>
             </figure>
           ))}
         </div>
+      </section>
+      <section className="cta-section">
+        <h2>What does your celebration look like?</h2>
+        <PrimaryButton to="/booking">Start Your Inquiry</PrimaryButton>
       </section>
     </>
   );

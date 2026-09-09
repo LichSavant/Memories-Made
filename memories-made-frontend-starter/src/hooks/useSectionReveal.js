@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export default function useSectionReveal(reducedMotion) {
+export default function useSectionReveal(reducedMotion, routeKey) {
   const rootRef = useRef(null);
 
   useEffect(() => {
@@ -23,9 +23,20 @@ export default function useSectionReveal(reducedMotion) {
       { rootMargin: "0px 0px -10%", threshold: 0.12 },
     );
 
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, [reducedMotion]);
+    sections.forEach((section) => {
+      section.classList.add("reveal-ready");
+      observer.observe(section);
+    });
+    const revealFocused = (event) => {
+      event.target.closest("[data-reveal]")?.classList.add("is-revealed");
+    };
+    const root = rootRef.current;
+    root?.addEventListener("focusin", revealFocused);
+    return () => {
+      observer.disconnect();
+      root?.removeEventListener("focusin", revealFocused);
+    };
+  }, [reducedMotion, routeKey]);
 
   return rootRef;
 }
