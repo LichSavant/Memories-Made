@@ -167,13 +167,9 @@ export default function HomePage() {
           <div className="service-stories">
             {celebrations.slice(0, 2).map((item, index) => (
               <article className="service-story" key={item.id}>
-                <Link
-                  className="service-story__image"
-                  to={index === 0 ? "/weddings" : "/debuts"}
-                  aria-label={`Explore ${item.type}`}
-                >
+                <div className="service-story__image">
                   <CelebrationImage item={item} />
-                </Link>
+                </div>
                 <div className="service-story__copy">
                   <span className="section-kicker">
                     0{index + 1} / {item.type}
@@ -216,15 +212,18 @@ export default function HomePage() {
               <h2>A feeling, in every detail.</h2>
             </div>
             <Link className="text-link" to="/gallery">
-              View Gallery <ArrowIcon />
+              View Full Gallery <ArrowIcon />
             </Link>
           </div>
           <div className="featured-grid">
             {[celebrations[0], celebrations[2]].map((item) => (
               <figure key={item.id}>
-                <Link to="/gallery" aria-label={`View gallery: ${item.label}`}>
-                  <CelebrationImage item={item} />
-                </Link>
+                <div>
+                  <CelebrationImage
+                    item={item}
+                    images={[celebrations[0], celebrations[2]]}
+                  />
+                </div>
                 <figcaption>
                   <span>{item.type}</span>
                   {item.label}
@@ -233,6 +232,23 @@ export default function HomePage() {
             ))}
           </div>
           <p className="form-note">{portfolioNote}</p>
+        </section>
+        <section
+          className="home-experience content-section editorial-note reveal-section"
+          data-reveal
+        >
+          <p className="section-kicker">The Memories Made experience</p>
+          <h2>Present for the moments that matter.</h2>
+          <div>
+            <p>
+              A considered plan makes room for the personal details: the flowers
+              you love, the people closest to you, and a celebration that feels
+              your own.
+            </p>
+            <Link className="text-link" to="/process">
+              Discover our approach <ArrowIcon />
+            </Link>
+          </div>
         </section>
         <section
           className="home-preview content-section reveal-section"
@@ -265,6 +281,7 @@ export default function HomePage() {
           className="home-feedback content-section editorial-note reveal-section"
           data-reveal
         >
+          {/* Placeholder: publish only approved, authentic client feedback. */}
           <p className="section-kicker">Client feedback / Coming soon</p>
           <h2>The stories after the celebration.</h2>
           <p>

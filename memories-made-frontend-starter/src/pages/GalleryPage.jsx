@@ -44,7 +44,7 @@ export default function GalleryPage() {
         <div className="gallery-grid">
           {shown.map((item) => (
             <figure className="gallery-item" key={item.id}>
-              <CelebrationImage item={item} />
+              <CelebrationImage item={item} images={shown} />
               <figcaption>
                 <span>{item.type}</span>
                 {item.label}

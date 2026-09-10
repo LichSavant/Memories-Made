@@ -1,14 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,500&family=Inter:wght@300;400;500;600&display=swap");
 
 :root {
-  --ink: #171211;
-  --ink-soft: #211a18;
-  --cream: #f5eee5;
-  --cream-muted: #d5c7bb;
-  --blush: #ce9b94;
-  --blush-deep: #b7827c;
-  --champagne: #d2b899;
-  --line: rgba(245, 238, 228, 0.19);
+  --surface: #f7f1eb;
+  --surface-warm: #efe4d9;
+  --text: #2a211e;
+  --text-muted: #6f615b;
+  --blush: #905455;
+  --blush-deep: #b97879;
+  --champagne: #795b36;
+  --line: rgba(128, 98, 61, 0.25);
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --paper: #fffdfc;
+  --rose: #ce9995;
   --page-padding: clamp(1.4rem, 4vw, 4rem);
   --content-max-width: 75rem;
   --section-gap: clamp(4rem, 7vw, 7rem);
@@ -23,7 +26,7 @@
   --bottom-nav-space: calc(
     var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px)
   );
-  color: var(--cream);
+  color: var(--text);
   font-family: "Inter", Arial, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -42,7 +45,7 @@ body,
   min-height: 100%;
   margin: 0;
   padding: 0;
-  background: var(--ink);
+  background: var(--surface);
 }
 
 html,
@@ -91,8 +94,8 @@ textarea:focus-visible {
   width: 100%;
   min-height: 100vh;
   padding-bottom: var(--bottom-nav-space);
-  background: var(--ink);
-  color: var(--cream);
+  background: var(--surface);
+  color: var(--text);
 }
 
 .home-shell {
@@ -100,7 +103,7 @@ textarea:focus-visible {
   --hero-service-glow: rgba(217, 141, 140, 0.13);
   position: relative;
   isolation: isolate;
-  background: var(--ink);
+  background: var(--surface);
 }
 
 .home-shell[data-service="debuts"] {
@@ -127,7 +130,7 @@ textarea:focus-visible {
     radial-gradient(circle at 18% 78%, rgba(99, 48, 53, 0.2), transparent 34%);
   opacity: var(--ambient-blush-opacity);
   transform: translate3d(-1%, 0, 0) scale(1.02);
-  animation: ambient-drift 26s ease-in-out infinite alternate;
+  animation: ambient-drift 26s var(--motion-ease) infinite alternate;
   transition: opacity 1.2s ease;
   will-change: transform, opacity;
 }
@@ -171,8 +174,8 @@ textarea:focus-visible {
   left: 1rem;
   z-index: 100;
   padding: 1rem;
-  background: var(--ink);
-  color: var(--cream);
+  background: var(--surface);
+  color: var(--text);
   transform: translateY(-200%);
 }
 
@@ -187,8 +190,8 @@ textarea:focus-visible {
   min-height: 100dvh;
   overflow: hidden;
   isolation: isolate;
-  background: var(--ink);
-  color: var(--cream);
+  background: var(--surface);
+  color: var(--text);
 }
 
 .hero__background,
@@ -211,12 +214,12 @@ textarea:focus-visible {
   height: 100%;
   object-fit: cover;
   object-position: 62% center;
-  filter: saturate(0.88) contrast(1.06) brightness(0.82);
+  filter: saturate(0.96) contrast(1.02) brightness(1);
   transform: scale(1.012);
 }
 
 .hero__photo--incoming {
-  animation: hero-crossfade var(--hero-fade-duration) ease-in-out both;
+  animation: hero-crossfade var(--hero-fade-duration) var(--motion-ease) both;
 }
 
 @keyframes hero-crossfade {
@@ -235,15 +238,15 @@ textarea:focus-visible {
       rgba(18, 12, 11, 0.38) 0%,
       transparent 24%,
       transparent 64%,
-      rgba(18, 12, 11, 0.82) 100%
+      rgba(42, 33, 30, 0.38) 100%
     ),
     linear-gradient(
       90deg,
-      rgba(20, 14, 12, 0.98) 0%,
-      rgba(20, 14, 12, 0.94) 20%,
-      rgba(20, 14, 12, 0.78) 39%,
-      rgba(20, 14, 12, 0.26) 67%,
-      rgba(20, 14, 12, 0.4) 100%
+      rgba(42, 33, 30, 0.78) 0%,
+      rgba(42, 33, 30, 0.74) 20%,
+      rgba(42, 33, 30, 0.63) 39%,
+      rgba(42, 33, 30, 0.1) 67%,
+      rgba(42, 33, 30, 0.18) 100%
     ),
     radial-gradient(
       circle at 70% 42%,
@@ -289,7 +292,7 @@ textarea:focus-visible {
   font-size: clamp(0.72rem, 1vw, 0.9rem);
   font-weight: 400;
   letter-spacing: 0.01em;
-  color: var(--cream-muted);
+  color: var(--text-muted);
 }
 
 .season span {
@@ -301,7 +304,7 @@ textarea:focus-visible {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  color: var(--cream);
+  color: var(--text);
 }
 
 .brand strong {
@@ -374,9 +377,9 @@ textarea:focus-visible {
   padding: 0.5rem 0;
   border: 0;
   background: transparent;
-  color: var(--cream-muted);
+  color: var(--text-muted);
   font-size: clamp(0.9rem, 1.1vw, 1.02rem);
-  transition: color 180ms ease;
+  transition: color 220ms var(--motion-ease);
 }
 
 .service-selector button:hover,
@@ -394,7 +397,7 @@ textarea:focus-visible {
   height: 1px;
   background: var(--blush);
   opacity: 0;
-  transition: opacity 180ms ease;
+  transition: opacity 220ms var(--motion-ease);
 }
 
 .service-selector button[aria-pressed="true"]::after {
@@ -409,7 +412,7 @@ textarea:focus-visible {
   padding: 0.5rem 0;
   border: 0;
   background: transparent;
-  color: var(--cream-muted);
+  color: var(--text-muted);
   font-size: 0.65rem;
   text-align: left;
 }
@@ -429,7 +432,7 @@ textarea:focus-visible {
   gap: 0.6rem;
   width: 5.25rem;
   margin: 1.25rem 0 0;
-  color: var(--cream-muted);
+  color: var(--text-muted);
   font-size: 0.6rem;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.12em;
@@ -481,7 +484,7 @@ textarea:focus-visible {
 .hero__copy {
   max-width: 29rem;
   margin: 1.5rem 0 0;
-  color: var(--cream-muted);
+  color: var(--text-muted);
   font-size: clamp(0.9rem, 1.25vw, 1.04rem);
   font-weight: 300;
   line-height: 1.55;
@@ -510,16 +513,16 @@ textarea:focus-visible {
   background: linear-gradient(135deg, var(--blush), var(--blush-deep));
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.19);
   text-align: center;
-  color: var(--ink);
+  color: var(--surface);
   font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.2;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   transition:
-    transform 240ms ease,
-    filter 240ms ease,
-    box-shadow 240ms ease;
+    transform 240ms var(--motion-ease),
+    filter 240ms var(--motion-ease),
+    box-shadow 240ms var(--motion-ease);
 }
 
 .primary-button:hover,
@@ -539,14 +542,14 @@ textarea:focus-visible {
   padding-top: 0.65rem;
   padding-bottom: 0.45rem;
   border-bottom: 1px solid rgba(217, 141, 140, 0.65);
-  color: var(--cream);
+  color: var(--text);
   font-size: 0.7rem;
   line-height: 1.4;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   transition:
-    border-color 180ms ease,
-    color 180ms ease;
+    border-color 220ms var(--motion-ease),
+    color 220ms var(--motion-ease);
 }
 
 .text-link:hover,
@@ -562,7 +565,7 @@ textarea:focus-visible {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.4;
-  transition: transform 240ms ease;
+  transition: transform 240ms var(--motion-ease);
 }
 
 .text-link:hover svg,
@@ -596,7 +599,7 @@ textarea:focus-visible {
 }
 
 .category-label strong {
-  color: var(--cream-muted);
+  color: var(--text-muted);
   font-size: 0.82rem;
   font-weight: 400;
 }
@@ -620,13 +623,13 @@ textarea:focus-visible {
 .availability-card svg {
   width: 3rem;
   fill: none;
-  stroke: var(--cream);
+  stroke: var(--text);
   stroke-width: 1.4;
 }
 
 .availability-card p {
   margin: 0;
-  color: var(--cream-muted);
+  color: var(--text-muted);
   font-size: clamp(0.78rem, 1vw, 0.9rem);
   line-height: 1.45;
 }
@@ -640,8 +643,8 @@ textarea:focus-visible {
   border-top: 1px solid var(--line);
   background: linear-gradient(
     180deg,
-    rgba(31, 24, 22, 0.96),
-    rgba(20, 15, 14, 0.98)
+    rgba(255, 253, 252, 0.94),
+    rgba(247, 241, 235, 0.97)
   );
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -666,12 +669,12 @@ textarea:focus-visible {
   padding: 0.8rem 0.65rem;
   border: 0;
   background: transparent;
-  color: var(--cream-muted);
+  color: var(--text-muted);
   text-align: center;
   font-size: 0.67rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  transition: color 220ms ease;
+  transition: color 220ms var(--motion-ease);
 }
 .bottom-nav :where(a, button)::after {
   content: "";
@@ -682,7 +685,7 @@ textarea:focus-visible {
   height: 1px;
   background: var(--blush);
   transform: scaleX(0);
-  transition: transform 220ms ease;
+  transition: transform 220ms var(--motion-ease);
 }
 .bottom-nav
   :where(a, button):is(
@@ -709,7 +712,7 @@ textarea:focus-visible {
 }
 .bottom-nav .nav-booking {
   border: 1px solid rgba(206, 155, 148, 0.5);
-  color: var(--cream);
+  color: var(--text);
   background: rgba(183, 130, 124, 0.09);
 }
 .services-menu {
@@ -722,7 +725,7 @@ textarea:focus-visible {
 .mobile-navigation-panel {
   position: absolute;
   bottom: calc(100% + 1px);
-  background: #211a18;
+  background: var(--paper);
   border: 1px solid var(--line);
   box-shadow: 0 -16px 48px rgba(0, 0, 0, 0.24);
 }
@@ -802,12 +805,12 @@ textarea:focus-visible {
     background:
       linear-gradient(
         180deg,
-        rgba(20, 14, 12, 0.46) 0%,
-        rgba(20, 14, 12, 0.68) 30%,
-        rgba(20, 14, 12, 0.96) 72%,
-        #171211 100%
+        rgba(42, 33, 30, 0.25) 0%,
+        rgba(42, 33, 30, 0.48) 30%,
+        rgba(42, 33, 30, 0.68) 72%,
+        rgba(42, 33, 30, 0.72) 100%
       ),
-      linear-gradient(90deg, rgba(20, 14, 12, 0.73), rgba(20, 14, 12, 0.1)),
+      linear-gradient(90deg, rgba(42, 33, 30, 0.5), rgba(20, 14, 12, 0.1)),
       radial-gradient(
         circle at 70% 28%,
         var(--hero-service-glow),

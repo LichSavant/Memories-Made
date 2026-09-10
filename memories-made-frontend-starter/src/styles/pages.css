@@ -1,6 +1,6 @@
 .internal-shell {
-  background: var(--ink);
-  color: var(--cream);
+  background: var(--surface);
+  color: var(--text);
 }
 
 .page-main {
@@ -16,7 +16,7 @@
   min-height: 6.5rem;
   padding-block: 1.25rem;
   border-bottom: 1px solid var(--line);
-  background: var(--ink);
+  background: var(--surface);
 }
 
 .site-header .brand {
@@ -41,7 +41,7 @@
       rgba(183, 130, 124, 0.13),
       transparent 60%
     ),
-    linear-gradient(150deg, var(--ink-soft), var(--ink));
+    linear-gradient(150deg, var(--surface-warm), var(--surface));
   box-shadow: inset 0 1px rgba(245, 238, 228, 0.04);
 }
 
@@ -65,27 +65,27 @@
 .page-hero__copy {
   max-width: 43rem;
   margin: 2rem 0 0;
-  color: var(--cream-muted);
+  color: var(--text-muted);
   line-height: 1.8;
 }
 
 .content-section {
   padding-block: var(--section-gap);
   border-bottom: 1px solid var(--line);
-  background: var(--ink);
-  color: var(--cream);
+  background: var(--surface);
+  color: var(--text);
 }
 
 .home-shell .content-section {
   position: relative;
-  background: rgba(23, 18, 17, 0.88);
+  background: rgba(255, 253, 252, 0.94);
 }
 
 .reveal-section.reveal-ready {
   opacity: 0;
   transform: translate3d(0, 20px, 0);
   transition:
-    opacity 700ms ease,
+    opacity 700ms var(--motion-ease),
     transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -146,7 +146,7 @@
 .editorial-note p,
 .home-intro > p,
 .home-preview p {
-  color: var(--cream-muted);
+  color: var(--text-muted);
   line-height: 1.75;
 }
 
@@ -176,13 +176,13 @@
   font-size: 0.7rem;
 }
 .mini-process span {
-  color: var(--cream-muted);
+  color: var(--text-muted);
   line-height: 1.6;
 }
 .mini-process strong {
   display: block;
   margin-bottom: 0.35rem;
-  color: var(--cream);
+  color: var(--text);
   font-family: "Cormorant Garamond", Georgia, serif;
   font-size: 1.6rem;
   font-weight: 400;
@@ -226,8 +226,8 @@
   align-items: center;
   gap: var(--grid-gap);
   padding-block: var(--section-gap);
-  background: var(--ink-soft);
-  color: var(--cream);
+  background: var(--surface-warm);
+  color: var(--text);
 }
 .cta-section h2 {
   max-width: 16ch;
@@ -257,7 +257,7 @@
 .timeline p {
   max-width: 38rem;
   margin: 1rem 0 0;
-  color: var(--cream-muted);
+  color: var(--text-muted);
   line-height: 1.7;
 }
 
@@ -274,7 +274,7 @@
 .progress-steps li {
   padding: 1rem;
   border-bottom: 1px solid var(--line);
-  color: var(--cream-muted);
+  color: var(--text-muted);
   font-size: 0.7rem;
   letter-spacing: 0.08em;
 }
@@ -288,7 +288,7 @@
   color: var(--blush);
 }
 .progress-steps .is-complete {
-  color: var(--cream);
+  color: var(--text);
 }
 
 .booking-form,
@@ -316,7 +316,7 @@ legend {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
-  color: var(--cream-muted);
+  color: var(--text-muted);
   font-size: 0.75rem;
   letter-spacing: 0.06em;
 }
@@ -331,10 +331,10 @@ textarea {
   padding: 0.85rem 1rem;
   border: 1px solid var(--line);
   border-radius: 0;
-  background: var(--ink-soft);
-  color: var(--cream);
+  background: var(--surface-warm);
+  color: var(--text);
   font: inherit;
-  color-scheme: dark;
+  color-scheme: light;
 }
 textarea {
   min-height: 9rem;
@@ -386,7 +386,7 @@ textarea {
   padding: 0.8rem 1.5rem;
   border: 1px solid var(--line);
   background: transparent;
-  color: var(--cream);
+  color: var(--text);
 }
 .form-note {
   color: var(--champagne);
@@ -403,7 +403,7 @@ textarea {
   border-bottom: 1px solid var(--line);
 }
 .review-list dt {
-  color: var(--cream-muted);
+  color: var(--text-muted);
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -432,7 +432,7 @@ textarea {
   height: 3rem;
   border: 1px solid var(--line);
   background: transparent;
-  color: var(--cream);
+  color: var(--text);
 }
 .calendar-grid {
   display: grid;
@@ -444,12 +444,12 @@ textarea {
   border: 0;
   border-top: 1px solid var(--line);
   background: transparent;
-  color: var(--cream);
+  color: var(--text);
 }
 .calendar-grid button:hover,
 .calendar-grid button.is-selected {
   background: var(--blush);
-  color: var(--ink);
+  color: var(--surface);
 }
 .weekday {
   display: grid;
@@ -466,7 +466,7 @@ textarea {
   font-size: clamp(2.2rem, 4vw, 3.5rem);
 }
 .date-summary > p {
-  color: var(--cream-muted);
+  color: var(--text-muted);
   line-height: 1.6;
 }
 .date-summary .primary-button {
@@ -482,7 +482,7 @@ textarea {
   min-height: 3rem;
   border: 1px solid var(--line);
   background: transparent;
-  color: var(--cream);
+  color: var(--text);
 }
 .period-choices button.is-selected {
   border-color: var(--blush);
@@ -499,7 +499,7 @@ textarea {
   padding: 0.7rem 1.5rem;
   border: 1px solid var(--line);
   background: transparent;
-  color: var(--cream-muted);
+  color: var(--text-muted);
 }
 .gallery-filters button.is-active {
   border-color: var(--blush);
@@ -519,7 +519,7 @@ textarea {
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem 0;
-  color: var(--cream-muted);
+  color: var(--text-muted);
   font-size: 0.78rem;
 }
 .gallery-item figcaption span {
@@ -539,7 +539,7 @@ textarea {
   font-size: clamp(2.5rem, 5vw, 4rem);
 }
 .success-panel p:last-child {
-  color: var(--cream-muted);
+  color: var(--text-muted);
   line-height: 1.7;
 }
 
@@ -550,14 +550,14 @@ textarea {
   gap: var(--grid-gap);
   padding-block: var(--grid-gap);
   border-top: 1px solid var(--line);
-  background: var(--ink);
-  color: var(--cream);
+  background: var(--surface);
+  color: var(--text);
 }
 .site-footer .brand {
   align-items: flex-start;
 }
 .site-footer p {
-  color: var(--cream-muted);
+  color: var(--text-muted);
   font-size: 0.8rem;
 }
 
@@ -584,7 +584,7 @@ textarea {
   min-width: 0;
 }
 .home-shell .home-preview {
-  background: rgba(33, 26, 24, 0.92);
+  background: var(--surface-warm);
 }
 .home-preview::after {
   content: "";
@@ -619,7 +619,7 @@ textarea {
 .not-found > p:not(.section-kicker) {
   max-width: 34rem;
   margin: 1.5rem 0 2.5rem;
-  color: var(--cream-muted);
+  color: var(--text-muted);
   line-height: 1.7;
 }
 
@@ -752,7 +752,7 @@ main:focus,
 .editorial-image {
   position: relative;
   overflow: hidden;
-  background: var(--ink-soft);
+  background: var(--surface-warm);
   aspect-ratio: 3 / 2;
 }
 .editorial-image::after {
@@ -761,7 +761,7 @@ main:focus,
   inset: 0;
   pointer-events: none;
   border: 1px solid rgba(245, 238, 228, 0.12);
-  transition: border-color 240ms ease;
+  transition: border-color 240ms var(--motion-ease);
   background: linear-gradient(180deg, transparent 60%, rgba(23, 18, 17, 0.2));
 }
 .editorial-image img {
@@ -769,20 +769,17 @@ main:focus,
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition:
-    transform 650ms ease,
-    opacity 650ms ease;
+  transition: opacity 700ms var(--motion-ease);
 }
 .reveal-ready:not(.is-revealed) .editorial-image img {
   opacity: 0.6;
-  transform: scale(1.02);
 }
 @media (hover: hover) {
-  a:hover .editorial-image::after {
+  .photo-trigger:hover .editorial-image::after {
     border-color: var(--blush);
   }
 }
-a:focus-visible .editorial-image::after {
+.photo-trigger:focus-visible .editorial-image::after {
   border-color: var(--blush);
 }
 .service-story__copy {
@@ -802,7 +799,7 @@ a:focus-visible .editorial-image::after {
     serif;
 }
 .service-story__copy p {
-  color: var(--cream-muted);
+  color: var(--text-muted);
   line-height: 1.7;
 }
 .service-story .text-link {
@@ -839,7 +836,7 @@ a:focus-visible .editorial-image::after {
   justify-content: space-between;
   padding: 1rem 0;
   font-size: 0.78rem;
-  color: var(--cream-muted);
+  color: var(--text-muted);
 }
 .featured-grid figcaption span {
   color: var(--blush);
@@ -849,7 +846,7 @@ a:focus-visible .editorial-image::after {
 }
 .home-shell .home-featured,
 .home-shell .home-feedback {
-  background: rgba(33, 26, 24, 0.76);
+  background: rgba(239, 228, 217, 0.85);
 }
 .home-shell .home-booking {
   background:
@@ -858,12 +855,12 @@ a:focus-visible .editorial-image::after {
       rgba(183, 130, 124, 0.15),
       transparent 70%
     ),
-    var(--ink);
+    var(--surface);
 }
 .booking-copy {
   max-width: 39rem;
   margin: 1.5rem auto 0;
-  color: var(--cream-muted);
+  color: var(--text-muted);
   line-height: 1.75;
 }
 .booking-actions {
@@ -882,7 +879,7 @@ a:focus-visible .editorial-image::after {
 }
 .availability-card strong {
   display: block;
-  color: var(--cream);
+  color: var(--text);
   margin-bottom: 0.4rem;
   font-weight: 500;
 }
@@ -910,7 +907,7 @@ a:focus-visible .editorial-image::after {
   min-height: 44px;
   font-size: 0.78rem;
   line-height: 1.6;
-  color: var(--cream-muted);
+  color: var(--text-muted);
   transition: color 200ms ease;
 }
 .footer-links a:hover {
@@ -979,7 +976,7 @@ a:focus-visible .editorial-image::after {
 }
 .calendar-grid button:disabled:hover {
   background: transparent;
-  color: var(--cream);
+  color: var(--text);
 }
 .date-summary {
   background: linear-gradient(135deg, rgba(183, 130, 124, 0.08), transparent);
@@ -1002,7 +999,7 @@ a:focus-visible .editorial-image::after {
 .draft-status {
   border-left: 2px solid var(--blush);
   padding: 1rem 1.5rem;
-  color: var(--cream-muted);
+  color: var(--text-muted);
   line-height: 1.7;
 }
 .choice-card {
