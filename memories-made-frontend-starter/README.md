@@ -73,3 +73,19 @@ Run `scripts/check-symmetry.js` through `agent-browser eval --stdin` on the
 homepage to check all nine pages at the current viewport. It checks shared
 gutters, section/form edges, matching image rows, and content overflow.
 See [LAYOUT-QA.md](LAYOUT-QA.md) for the layout cleanup validation record.
+
+## Immersive light theme
+
+The shared grid now uses semantic surface/text tokens, warm ivory paper, rose
+accents, and dark contrast scoped to the hero, experience section, and footer.
+`src/styles/immersive.css` contains the photographic presentation and viewer.
+
+`CelebrationImage` opens a native modal dialog without changing routes. Pass
+`images` to define its previous/next collection; Gallery uses the current filter.
+The viewer supports Escape, backdrop/close buttons, arrow keys, Tab cycling,
+scroll locking, and focus restoration. Text CTAs remain normal route links.
+No viewer dependency was added. Photography and client feedback remain clearly
+marked previews until approved material is available.
+
+Run `scripts/check-lightbox.js` through `agent-browser eval --stdin` on Home or
+Gallery. See [IMMERSIVE-QA.md](IMMERSIVE-QA.md) for validation and known limits.
