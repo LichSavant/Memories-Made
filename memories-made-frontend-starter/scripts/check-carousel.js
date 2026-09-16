@@ -2,8 +2,12 @@
 // the two existing photos; no fixture modifies production data or adds photos.
 (async () => {
   // Vite may attach an HMR timestamp; mutate the exact module used by the page.
-  const pageModule = await fetch("/src/pages/HomePage.jsx").then((response) => response.text());
-  const dataUrl = pageModule.match(/from ["']([^"']*serviceBackgrounds\.js[^"']*)["']/)[1];
+  const pageModule = await fetch("/src/pages/HomePage.jsx").then((response) =>
+    response.text(),
+  );
+  const dataUrl = pageModule.match(
+    /from ["']([^"']*serviceBackgrounds\.js[^"']*)["']/,
+  )[1];
   const { getBackgrounds, serviceBackgrounds } = await import(dataUrl);
   const originals = { ...serviceBackgrounds };
   const results = [];
@@ -15,19 +19,38 @@
   const until = async (predicate, timeout = 8000) => {
     const start = performance.now();
     while (!predicate()) {
-      if (performance.now() - start > timeout) throw new Error("Timed out waiting for carousel state");
+      if (performance.now() - start > timeout)
+        throw new Error("Timed out waiting for carousel state");
       await wait(50);
     }
   };
-  const button = (service) => [...document.querySelectorAll(".service-selector button")].find((node) => node.textContent.toLowerCase() === service);
+  const button = (service) =>
+    [...document.querySelectorAll(".service-selector button")].find(
+      (node) => node.textContent.toLowerCase() === service,
+    );
   const current = () => document.querySelector(".hero__photo");
   const incoming = () => document.querySelector(".hero__photo--incoming");
   const settled = (name) => !incoming() && current().src.includes(name);
   let observer;
   try {
-    for (const service of ["weddings", "debuts"]) {
+    assert(
+      [...document.querySelectorAll(".service-selector button")]
+        .map((node) => node.textContent)
+        .join(",") === "Weddings,Debuts,Prenups,Anniversaries,Parties",
+      "Hero has exactly five services and no More",
+    );
+    for (const service of [
+      "weddings",
+      "debuts",
+      "prenups",
+      "anniversaries",
+      "parties",
+    ]) {
       const photos = getBackgrounds(service);
-      assert(photos.length === 4, `${service} has four backgrounds`);
+      assert(
+        photos.length >= 2,
+        `${service} has a rotating background collection`,
+      );
       await Promise.all(
         photos.map(({ src }) => {
           const image = new Image();
@@ -37,6 +60,18 @@
       );
       assert(true, `${service} backgrounds decode successfully`);
     }
+    for (const service of ["prenups", "anniversaries", "parties"]) {
+      button(service).click();
+      await until(
+        () =>
+          !incoming() && current().src.endsWith(getBackgrounds(service)[0].src),
+      );
+      assert(
+        current().naturalWidth > 0 &&
+          button(service).getAttribute("aria-pressed") === "true",
+        `${service} switches to a decoded local image`,
+      );
+    }
     for (const service of ["weddings", "debuts"]) {
       serviceBackgrounds[service] = Array.from({ length: 4 }, (_, index) => ({
         src: `/src/assets/${index % 2 ? "hero-background.jpg" : "Enchanted-Wedding.jpg"}?fixture=${service}-${index}`,
@@ -45,33 +80,81 @@
     }
     button("weddings").click();
     await until(() => settled("weddings-0"));
-    assert(button("weddings").getAttribute("aria-pressed") === "true", "Weddings selected and starts at first photo");
-    assert(document.querySelector(".eyebrow").textContent === "Premium Wedding Planning", "Wedding microcopy is active");
-    assert([...document.querySelectorAll(".carousel-progress span")].map((node) => node.textContent).join("/") === "01/04", "Progress starts at first wedding photo");
+    assert(
+      button("weddings").getAttribute("aria-pressed") === "true",
+      "Weddings selected and starts at first photo",
+    );
+    assert(
+      document.querySelector(".eyebrow").textContent ===
+        "Premium Wedding Planning",
+      "Wedding microcopy is active",
+    );
+    assert(
+      [...document.querySelectorAll(".carousel-progress span")]
+        .map((node) => node.textContent)
+        .join("/") === "01/04",
+      "Progress starts at first wedding photo",
+    );
 
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
       await wait(6800);
       assert(settled("weddings-0"), "Reduced motion disables autoplay");
       button("debuts").click();
       await until(() => settled("debuts-0"));
-      assert(!incoming(), "Reduced motion preserves service switching without a fade");
-      assert(!document.querySelector(".background-toggle"), "No inactive playback control in reduced motion");
+      assert(
+        !incoming(),
+        "Reduced motion preserves service switching without a fade",
+      );
+      assert(
+        !document.querySelector(".background-toggle"),
+        "No inactive playback control in reduced motion",
+      );
       return results;
     }
 
     let mutations = 0;
-    observer = new MutationObserver((changes) => { mutations += changes.length; });
-    for (const selector of [".topbar", ".hero__content", ".category-label", ".availability-card", ".bottom-nav"]) {
-      observer.observe(document.querySelector(selector), { attributes: true, childList: true, subtree: true, characterData: true });
+    observer = new MutationObserver((changes) => {
+      mutations += changes.length;
+    });
+    for (const selector of [
+      ".topbar",
+      ".hero__content",
+      ".category-label",
+      ".availability-card",
+      ".bottom-nav",
+    ]) {
+      observer.observe(document.querySelector(selector), {
+        attributes: true,
+        childList: true,
+        subtree: true,
+        characterData: true,
+      });
     }
-    const headingBefore = document.querySelector("h1").getBoundingClientRect().toJSON();
+    const headingBefore = document
+      .querySelector("h1")
+      .getBoundingClientRect()
+      .toJSON();
     await until(() => incoming()?.src.includes("weddings-1"));
     await wait(650);
-    assert(Number(getComputedStyle(incoming()).opacity) > 0 && Number(getComputedStyle(incoming()).opacity) < 1, "Incoming image crossfades gradually");
-    assert(getComputedStyle(current()).opacity === "1" && current().naturalWidth > 0 && incoming().naturalWidth > 0, "Opaque decoded base prevents blank frames");
+    assert(
+      Number(getComputedStyle(incoming()).opacity) > 0 &&
+        Number(getComputedStyle(incoming()).opacity) < 1,
+      "Incoming image crossfades gradually",
+    );
+    assert(
+      getComputedStyle(current()).opacity === "1" &&
+        current().naturalWidth > 0 &&
+        incoming().naturalWidth > 0,
+      "Opaque decoded base prevents blank frames",
+    );
     await until(() => settled("weddings-1"));
     assert(mutations === 0, "Autoplay does not mutate foreground DOM");
-    assert(JSON.stringify(document.querySelector("h1").getBoundingClientRect().toJSON()) === JSON.stringify(headingBefore), "Foreground remains stationary");
+    assert(
+      JSON.stringify(
+        document.querySelector("h1").getBoundingClientRect().toJSON(),
+      ) === JSON.stringify(headingBefore),
+      "Foreground remains stationary",
+    );
     observer.disconnect();
 
     button("debuts").click();
@@ -79,15 +162,28 @@
     button("weddings").click();
     button("debuts").click();
     await until(() => settled("debuts-0"));
-    assert(location.pathname === "/" && button("debuts").getAttribute("aria-pressed") === "true", "Rapid service switching stays on home and selects latest service");
-    assert(document.querySelector(".eyebrow").textContent === "Signature Debut Planning", "Debut microcopy follows selection");
-    assert([...document.querySelectorAll(".carousel-progress span")].map((node) => node.textContent).join("/") === "01/04", "Progress resets with service selection");
-    document.querySelector(".background-toggle").click();
-    await wait(6800);
-    assert(settled("debuts-0"), "Pause stops automatic rotation");
-    document.querySelector(".background-toggle").click();
+    assert(
+      location.pathname === "/" &&
+        button("debuts").getAttribute("aria-pressed") === "true",
+      "Rapid service switching stays on home and selects latest service",
+    );
+    assert(
+      document.querySelector(".eyebrow").textContent ===
+        "Signature Debut Planning",
+      "Debut microcopy follows selection",
+    );
+    assert(
+      [...document.querySelectorAll(".carousel-progress span")]
+        .map((node) => node.textContent)
+        .join("/") === "01/04",
+      "Progress resets with service selection",
+    );
+    assert(
+      !document.querySelector(".background-toggle"),
+      "Pause Backgrounds control is removed",
+    );
     await until(() => settled("debuts-1"));
-    assert(true, "Resume continues rotation");
+    assert(true, "Automatic rotation continues without a pause control");
     button("debuts").click();
     await until(() => settled("debuts-0"));
     assert(true, "Re-selecting the active service resets its collection");

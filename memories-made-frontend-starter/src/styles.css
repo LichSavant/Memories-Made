@@ -404,28 +404,6 @@ textarea:focus-visible {
   opacity: 1;
 }
 
-.background-toggle {
-  display: block;
-  max-width: 100%;
-  min-height: 44px;
-  margin-top: 2rem;
-  padding: 0.5rem 0;
-  border: 0;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 0.65rem;
-  text-align: left;
-}
-
-.background-toggle:hover {
-  color: var(--blush);
-}
-
-.background-toggle:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-
 .carousel-progress {
   display: flex;
   align-items: center;
@@ -864,9 +842,6 @@ textarea:focus-visible {
     grid-column: 1 / -1;
     flex-direction: row;
     gap: 2rem;
-  }
-  .background-toggle {
-    margin-top: 0.25rem;
   }
   .carousel-progress {
     margin: 0;

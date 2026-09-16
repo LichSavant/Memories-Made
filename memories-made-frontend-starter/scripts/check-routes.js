@@ -2,6 +2,11 @@
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const results = [];
   for (const path of [
+    "/services",
+    "/services/prenups",
+    "/services/anniversaries",
+    "/services/parties",
+    "/services/more",
     "/weddings",
     "/debuts",
     "/packages",

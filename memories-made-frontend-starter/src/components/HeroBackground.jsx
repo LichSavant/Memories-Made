@@ -22,7 +22,6 @@ function loadImage(src) {
 
 export default function HeroBackground({
   selection,
-  paused,
   reducedMotion,
   onSlideChange,
 }) {
@@ -59,7 +58,7 @@ export default function HeroBackground({
     if (incoming || !visible) return;
     const photos = getBackgrounds(selection.service);
     const switching = current.selection !== selection;
-    if (!switching && (paused || reducedMotion || photos.length < 2)) return;
+    if (!switching && (reducedMotion || photos.length < 2)) return;
 
     let cancelled = false;
     const startIndex = switching ? 0 : (current.index + 1) % photos.length;
@@ -90,7 +89,7 @@ export default function HeroBackground({
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [selection, current, incoming, paused, reducedMotion, visible]);
+  }, [selection, current, incoming, reducedMotion, visible]);
 
   return (
     <div

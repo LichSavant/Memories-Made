@@ -1,14 +1,14 @@
-// Run with agent-browser eval --stdin against the Vite dev server.
+﻿// Run with agent-browser eval --stdin on the running app.
 (async () => {
   const results = [];
-  const wait = () => new Promise((resolve) => setTimeout(resolve, 120));
+  const wait = (ms = 100) => new Promise((resolve) => setTimeout(resolve, ms));
   const assert = (value, message) => {
     if (!value) throw new Error(message);
     results.push(message);
   };
   const click = async (selector) => {
     const node = document.querySelector(selector);
-    if (!node) throw new Error(`Missing control: ${selector}`);
+    if (!node) throw new Error(`Missing: ${selector}`);
     node.click();
     await wait();
   };
@@ -26,140 +26,208 @@
     await wait();
   };
   const go = async (path) => click(`.footer-links a[href="${path}"]`);
-  const advance = async () => click(".form-actions .primary-button");
-  const currentStep = () =>
+  const next = async () => click(".form-actions .primary-button");
+  const back = async () => click(".form-actions .secondary-button");
+  const radio = async (name, value) =>
+    click(`input[name="${name}"][value="${value}"]`);
+  const step = () =>
     document.querySelector('[aria-current="step"]')?.textContent;
-
-  await go("/availability");
+  await go("/packages");
   assert(
-    document.querySelector(
-      '.bottom-nav a[href="/availability"][aria-current="page"]',
-    ),
-    "Availability has an active navigation state",
+    !document.querySelector(".package-option"),
+    "Packages requires event selection first",
   );
-  await click('.calendar header button[aria-label="Next month"]');
-  await click(".calendar-grid button:last-child");
-  const chosen = document.querySelector(".date-summary h2").textContent;
-  await click('.calendar header button[aria-label="Next month"]');
+  await click(".event-selector button:first-child");
   assert(
-    document.querySelector(".date-summary h2").textContent === chosen,
-    "Changing months preserves the full selected date",
+    document.querySelectorAll(".package-option").length === 3,
+    "Wedding shows existing packages",
   );
+  await click(".package-option:first-child > button");
   assert(
-    !document.querySelector('.calendar-grid [aria-pressed="true"]'),
-    "Another month does not falsely select the same day number",
+    document
+      .querySelector(".package-detail:not([hidden])")
+      ?.textContent.includes("Planning consultation"),
+    "Package details expand in-page",
   );
-  await click(".period-choices button:last-child");
-  const bookingHref = document
-    .querySelector(".date-summary a")
-    .getAttribute("href");
-  const expectedDate = new URL(bookingHref, location.origin).searchParams.get(
-    "date",
-  );
-  await click(".date-summary a");
-  document.querySelector("form").requestSubmit();
-  await wait();
+  await click(".package-detail:not([hidden]) a");
   assert(
-    currentStep().includes("Event Type") &&
-      document.querySelector("#eventType-error"),
-    "Enter/submit cannot bypass the required event type",
+    document.querySelector('input[name="eventType"]:checked')?.value ===
+      "Wedding",
+    "Package inquiry retains event",
   );
-  await click('[name="eventType"][value="Wedding"]');
-  await advance();
+  await next();
+  await fill("date", "2099-06-15");
+  await next();
   assert(
-    document.querySelector('[name="date"]').value === expectedDate &&
-      document.querySelector('[name="period"]').value === "Evening",
-    "Date and time carry from availability into the inquiry",
+    document.querySelector('[name="package"]').value === "Essential",
+    "Package inquiry retains package",
   );
-  await fill("alternativeDate", "2020-01-01");
-  await advance();
+  await back();
+  await back();
+  await radio("eventType", "Prenup");
+  await next();
+  await next();
   assert(
-    document.querySelector("#alternativeDate-error"),
-    "Past alternative dates are rejected",
+    document.querySelector('[name="package"]').value === "" &&
+      document.querySelector('[name="package"]').options.length === 2,
+    "Changing event clears unrelated package choices",
   );
-  await fill("alternativeDate", "");
-  await advance();
   await fill("package", "Help me decide");
-  await fill("guests", "0");
-  await advance();
+  await next();
+  await next();
   assert(
-    document.querySelector("#guests-error"),
-    "Invalid guest counts are rejected",
+    document.querySelector("#email-error"),
+    "Inquiry validates contact details",
   );
-  await fill("guests", "80");
-  await advance();
-  await advance();
-  assert(
-    document.querySelector("#name-error") &&
-      document.querySelector("#email-error") &&
-      document.querySelector("#phone-error"),
-    "Required contact details are validated",
-  );
-  await fill("name", "Browser QA");
-  await fill("email", "qa@example.com");
-  await fill("phone", "09000000000");
-  await advance();
-  assert(
-    document.querySelector(".review-list").textContent.includes(expectedDate) &&
-      document.querySelector(".review-list").textContent.includes("Evening"),
-    "Review retains selected event details",
-  );
-  await advance();
+  await fill("name", "Test Client");
+  await fill("email", "test@example.com");
+  await fill("phone", "123456789");
+  await next();
+  await next();
   assert(
     document
       .querySelector(".draft-status")
-      .textContent.includes("Nothing has been sent"),
-    "Preparation clearly reports a draft without claiming submission",
-  );
-  await click(".form-actions .secondary-button");
-  assert(
-    document.querySelector('[name="name"]').value === "Browser QA",
-    "Back preserves entered contact details",
+      ?.textContent.includes("Nothing has been sent"),
+    "Event inquiry remains an honest unsent draft",
   );
   await go("/packages");
-  await click(".package-card:nth-child(2) a");
-  await click('[name="eventType"][value="Debut"]');
-  await advance();
-  await fill("date", expectedDate);
-  await advance();
-  assert(
-    document.querySelector('[name="package"]').value === "Signature",
-    "Package inquiry carries the selected package",
-  );
-  await go("/gallery");
-  for (const filter of ["Weddings", "Debuts", "Styling", "All"]) {
-    const button = [
-      ...document.querySelectorAll(".gallery-filters button"),
-    ].find((node) => node.textContent === filter);
-    button.click();
-    await wait();
+  for (const index of [2, 3, 4, 5, 6]) {
+    await click(`.event-selector button:nth-child(${index})`);
     assert(
-      document.querySelectorAll(".gallery-item").length ===
-        (filter === "All" ? 3 : 1),
-      `${filter} gallery filter shows matching image data`,
+      location.pathname === "/packages",
+      `Event ${index} switches in-page`,
     );
     assert(
-      button.getAttribute("aria-pressed") === "true",
-      `${filter} gallery filter announces selection`,
+      index === 2
+        ? document.querySelectorAll(".package-option").length === 3
+        : !!document.querySelector(".package-empty"),
+      `Event ${index} only shows relevant packages or inquiry state`,
     );
   }
-  await go("/contact");
-  await fill("name", "Browser QA");
-  await fill("email", "qa@example.com");
-  await fill("message", "Local browser test only.");
-  await click('.contact-form button[type="submit"]');
+  await click(".package-empty a");
+  assert(
+    document.querySelector('input[name="eventType"]:checked')?.value ===
+      "Other / Custom Event",
+    "Custom-event inquiry retains selection",
+  );
+
+  await go("/availability");
+  await next();
+  assert(
+    step().includes("Date") && document.querySelector('[role="alert"]'),
+    "Cannot skip date",
+  );
+  await click('[aria-label="Next month"]');
+  await click(".calendar-grid button:last-child");
+  const selected = document.querySelector(
+    '.calendar [role="status"]',
+  ).textContent;
+  await click('[aria-label="Next month"]');
+  assert(
+    document.querySelector('.calendar [role="status"]').textContent ===
+      selected &&
+      !document.querySelector('.calendar-grid [aria-pressed="true"]'),
+    "Calendar preserves full date across month navigation",
+  );
+  await next();
+  await radio("type", "Online");
+  await next();
+  assert(
+    step().includes("Time") && !document.querySelector('[name="location"]'),
+    "Online skips physical location",
+  );
+  await next();
+  assert(
+    step().includes("Time") && document.querySelector('[role="alert"]'),
+    "Cannot skip time",
+  );
+  await radio("time", "09:00");
+  await next();
+  await next();
+  assert(
+    step().includes("Details") && document.querySelector('[role="alert"]'),
+    "Meeting validates contact details",
+  );
+  await fill("name", "Test Client");
+  await fill("email", "test@example.com");
+  await next();
+  assert(
+    document.querySelector(".review-list").textContent.includes("Online") &&
+      !document.querySelector(".review-list").textContent.includes("Location"),
+    "Online review omits location",
+  );
+  await next();
   assert(
     document
-      .querySelector(".success-panel")
-      .textContent.includes("Nothing has been sent"),
-    "Contact draft does not imply a message was sent",
+      .querySelector(".draft-status")
+      ?.textContent.includes("Nothing has been sent or booked"),
+    "Meeting request clearly remains an unsent draft",
   );
-  await click(".success-panel button");
+  await back();
+  await back();
+  await back();
+  await radio("type", "In Person");
+  await next();
+  assert(step().includes("Location"), "In-person includes location step");
+  await radio("locationChoice", "enter");
+  await next();
   assert(
-    document.querySelector('[name="message"]').value ===
-      "Local browser test only.",
-    "Contact draft remains editable",
+    step().includes("Location") && document.querySelector('[role="alert"]'),
+    "Entered location cannot be blank",
   );
-  await click(".site-header .brand");
-  return results;
+  await fill("location", "Preferred cafe");
+  await next();
+  assert(
+    !document.querySelector('input[name="time"]:checked'),
+    "Changing meeting setup clears previous time",
+  );
+  await radio("time", "10:30");
+  await next();
+  await next();
+  assert(
+    document
+      .querySelector(".review-list")
+      .textContent.includes("Preferred cafe"),
+    "In-person review retains entered location",
+  );
+  await back();
+  await back();
+  await back();
+  await radio("locationChoice", "later");
+  await next();
+  await next();
+  await next();
+  assert(
+    document
+      .querySelector(".review-list")
+      .textContent.includes("Decide location later") &&
+      !document
+        .querySelector(".review-list")
+        .textContent.includes("Preferred cafe"),
+    "Deferred location is optional and clears stale location",
+  );
+  await next();
+  assert(
+    !!document.querySelector(".draft-status"),
+    "Deferred-location request completes",
+  );
+  await back();
+  await back();
+  await back();
+  await back();
+  await back();
+  await click('[aria-label="Next month"]');
+  await click(".calendar-grid button:last-child");
+  await next();
+  await next();
+  await next();
+  assert(
+    !document.querySelector('input[name="time"]:checked'),
+    "Changing date clears stale time selection",
+  );
+  assert(
+    !document.querySelector('a[href*="zoom.us"], a[href*="meet.google"]'),
+    "No fabricated meeting links",
+  );
+  return { viewport: `${innerWidth}x${innerHeight}`, results };
 })();

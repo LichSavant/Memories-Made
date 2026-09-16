@@ -13,3 +13,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   </React.StrictMode>,
 );
 import "./styles/immersive.css";
+
+import "./styles/planning.css";

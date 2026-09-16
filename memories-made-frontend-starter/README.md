@@ -1,91 +1,69 @@
-# Memories Made Weddings & Events
+﻿# MemoriesMade
 
-React/Vite frontend for Memories Made Events Organizing Services. The existing photographic hero, editorial typography, and service-aware carousel are preserved.
+React/Vite frontend for MemoriesMade. The existing light editorial design, photographic hero, carousel and gallery lightbox are preserved.
 
 ## Run locally
 
 ```sh
 npm install
 npm run dev
+npm test
 npm run build
 ```
 
-On Windows, use `npm.cmd` if PowerShell blocks the npm script.
+On Windows, use `npm.cmd` if PowerShell blocks the npm script. No lint script is configured. Unit tests use Node's built-in test runner; no application dependencies were added.
 
-## Page flow and shared systems
+## Services and packages
 
-- Home: hero → photographic service discovery → curated gallery preview → process and package introductions → temporary client-feedback area → availability/inquiry CTA → structured footer.
-- `SiteNavigation` shares the same destination hierarchy across every page. Desktop uses the fixed bottom bar with a small Services disclosure; widths up to 900px use Home / Menu / Start Your Inquiry. Both disclosures close on Escape, outside click, focus leaving navigation, or navigation. Closed panels are absent from keyboard navigation.
-- `useSectionReveal` reuses IntersectionObserver for 20px/700ms section reveals and 650ms image settling. Reduced motion disables movement; content is visible if the observer is unavailable. Keyboard focus reveals its containing section.
-- `serviceBackgrounds` remains the single source for the four wedding and four debut hero photos. The five-second hold, 1.5-second cinematic crossfade, pause/resume, visibility handling, failed-image fallback, and rapid-switch handling are unchanged.
-- `celebrations` selects three existing local images for the public preview and functional All / Weddings / Debuts / Styling filters. No additional image downloads or application dependencies were introduced.
-- `packages` shares the existing Essential / Signature / Bespoke starting points between package discovery and the inquiry form.
+`src/data/services.js` owns the service taxonomy, labels, inquiry values and routes. Weddings, Debuts, Prenups, Anniversaries and Parties appear in the hero. The full `/services` experience also includes More, a generic custom-event inquiry path. Navigation, booking and contact consume the same configuration.
 
-## Availability and inquiry
+`src/data/serviceBackgrounds.js` owns carousel collections. `placeholderCollections` explicitly reuses existing local images for the new categories. Replace those mappings with approved imagery later. Autoplay, preloading, crossfades, visibility handling, failed-image fallback and reduced motion remain supported; the visible pause control is removed.
 
-Availability collects a preferred date and time, carried to `/booking` in URL parameters. It is not a live availability feed. Month navigation retains the entire selected date. Past dates are disabled.
+`/packages` starts with event selection. The optional `?event=weddings` (or another service ID) preserves a selection from discovery links. Selecting events updates in-page. `packagesForEvent` filters the existing Essential, Signature and Bespoke starting points for Weddings and Debuts. No package data or prices have been added for the new categories. Those categories show an inquiry invitation. Details expand in-page, and inquiry links preserve both event and package. Changing the inquiry event clears unrelated package choices.
 
-Package links preselect a package; wedding/debut inquiry links preselect the event type. The multi-step form validates required details, dates, and guest counts, then shows an editable review. Enter cannot skip required steps.
+## Coordinator meetings
 
-**Booking and contact prepare drafts only. They do not send data or reserve dates.** Drafts remain in component memory and are lost when leaving/reloading the page. The interface states this limitation. No backend, account system, payment flow, or speculative contact destination has been added.
+`/availability` is now Schedule a Meeting, separate from event-date inquiries:
+
+- Online: date → meeting type → time → details → review.
+- In person: date → meeting type → location or decide later → time → details → review.
+
+`src/data/meetingAvailability.js` isolates the preview provider, timezone, validation, steps and request shape. All meeting dates/times use Asia/Manila. Preview slots are explicitly labelled, past times are rejected, and changing the date or setup clears stale time/location values. Required details are name and email; discussion notes are optional.
+
+**There is no coordinator calendar or submission backend. Request Meeting prepares an unsent draft, never a booking confirmation.** Users can download a text copy. Online links are not generated. State is held in component memory and clears on navigation/reload. Booking and Contact also retain their existing honest draft-only behavior.
+
+To connect a real provider, replace `getMeetingAvailability` with dated, identified slots from an authoritative source and add loading/error/empty states. Replace `prepareMeetingRequest` with a server submission that revalidates availability, handles conflicts, and returns the actual request status. Remove preview notices only once the live flow has been verified.
+
+## Gallery and visual system
+
+The gallery retains its three existing inspiration images and All / Weddings / Debuts / Styling filters. No unbacked categories or portfolio items were added. Its lead landscape image, staggered portrait/detail pairing, captions, champagne rules and warm surfaces extend the existing editorial direction. `CelebrationImage` retains the native dialog, keyboard navigation, focus return and scroll lock. Images never zoom on hover.
+
+Shared layout tokens remain in `src/styles.css` and `src/styles/pages.css`. `src/styles/immersive.css` supplies the existing photographic presentation; `src/styles/planning.css` adds the event selector, gallery exhibition and progressive scheduler. Motion respects `prefers-reduced-motion`.
 
 ## Content awaiting approval
 
-All existing service images are documented as temporary assets in `src/assets/placeholders/`. The gallery and home preview explicitly label them as inspiration pending approved Memories Made photography. Replace the assets and update captions/credits in `src/data/celebrations.js` when approved content is available. Do not remove the preview note until then.
-
-There is no verified local testimonial dataset or contact/social-link dataset. The client-feedback section is explicitly temporary and contains no quotes, ratings, or client counts. Package names and base inclusions are inherited from the starter; final business-approved scopes and prices must be confirmed before launch.
+Photography in `src/assets/placeholders/` is temporary inspiration, not verified client work. Replace assets and update `celebrations.js` captions and credits when approved photography is available. Package names and inclusions are inherited from the starter, not newly verified business data; scopes and prices require business approval. No testimonials, contact destinations, prices, confirmed corporate offerings, or meeting links have been invented.
 
 ## Browser regression checks
 
-No lint script or unit-test runner is configured. The browser checks use the standalone `agent-browser` CLI, not an application dependency, against the Vite dev server:
+Use the standalone agent-browser CLI against the Vite server. It is not an application dependency.
 
 ```powershell
 npx.cmd --yes agent-browser open http://127.0.0.1:5173
-Get-Content -Raw scripts/check-layout.js | npx.cmd --yes agent-browser eval --stdin
 Get-Content -Raw scripts/check-routes.js | npx.cmd --yes agent-browser eval --stdin
-Get-Content -Raw scripts/check-flow.js | npx.cmd --yes agent-browser eval --stdin
+Get-Content -Raw scripts/check-layout.js | npx.cmd --yes agent-browser eval --stdin
+Get-Content -Raw scripts/check-symmetry.js | npx.cmd --yes agent-browser eval --stdin
 Get-Content -Raw scripts/check-carousel.js | npx.cmd --yes agent-browser eval --stdin
-npx.cmd --yes agent-browser set media reduced-motion
+Get-Content -Raw scripts/check-flow.js | npx.cmd --yes agent-browser eval --stdin
+Get-Content -Raw scripts/check-planning-access.js | npx.cmd --yes agent-browser eval --stdin
+npx.cmd --yes agent-browser open http://127.0.0.1:5173/gallery
+Get-Content -Raw scripts/check-lightbox.js | npx.cmd --yes agent-browser eval --stdin
+npx.cmd --yes agent-browser open http://127.0.0.1:5173
+npx.cmd --yes agent-browser set media light reduced-motion
 Get-Content -Raw scripts/check-carousel.js | npx.cmd --yes agent-browser eval --stdin
 npx.cmd --yes agent-browser close
 ```
 
-Run layout and route checks at 1440×1000, 1366×768, 1024×768, 768×1024, 430×932, and 390×844 via `agent-browser set viewport WIDTH HEIGHT`. Start with the homepage and closed navigation panels. Carousel checks temporarily replace collections in browser memory with local fixture URLs, then restore them. Reload after testing to reset the page.
+Run route/layout checks from Home with menus closed. Change dimensions with `agent-browser set viewport WIDTH HEIGHT`. Carousel checks temporarily swap browser-memory collections with existing local fixture URLs, then restore them. Reload afterward. The flow check uses synthetic contact details to exercise unsent drafts only.
 
-See [QA.md](QA.md) for the feature-branch validation record and remaining launch prerequisites.
-
-## Layout symmetry
-
-Content sections, page heroes, headers, footer, and bottom navigation share the
-`--content-max-width` (75rem) and `--content-gutter` container rule. Backgrounds
-remain full bleed. `--section-gap` controls vertical section padding and
-`--grid-gap` controls the major column gaps. The hero retains a separate 90rem
-composition with a shared rail/gutter calculation to preserve its asymmetric
-layout on wide screens.
-
-Featured photos use aligned equal columns. Gallery images use three columns on
-desktop, two on tablet with a full-width final odd item, and one on mobile.
-Filters retain the same data and behavior. Hover/focus highlights photo borders;
-it never changes image scale or crop. Non-hover image reveals and hero motion
-remain enabled, respecting reduced motion.
-
-Run `scripts/check-symmetry.js` through `agent-browser eval --stdin` on the
-homepage to check all nine pages at the current viewport. It checks shared
-gutters, section/form edges, matching image rows, and content overflow.
-See [LAYOUT-QA.md](LAYOUT-QA.md) for the layout cleanup validation record.
-
-## Immersive light theme
-
-The shared grid now uses semantic surface/text tokens, warm ivory paper, rose
-accents, and dark contrast scoped to the hero, experience section, and footer.
-`src/styles/immersive.css` contains the photographic presentation and viewer.
-
-`CelebrationImage` opens a native modal dialog without changing routes. Pass
-`images` to define its previous/next collection; Gallery uses the current filter.
-The viewer supports Escape, backdrop/close buttons, arrow keys, Tab cycling,
-scroll locking, and focus restoration. Text CTAs remain normal route links.
-No viewer dependency was added. Photography and client feedback remain clearly
-marked previews until approved material is available.
-
-Run `scripts/check-lightbox.js` through `agent-browser eval --stdin` on Home or
-Gallery. See [IMMERSIVE-QA.md](IMMERSIVE-QA.md) for validation and known limits.
+See [PLANNING-QA.md](PLANNING-QA.md) for this branch's validation and file inventory. Earlier QA files are historical records of prior branches.

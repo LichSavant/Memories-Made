@@ -23,7 +23,7 @@
       getComputedStyle(nav).position === "fixed" &&
       Math.abs(before.bottom - innerHeight) < 1,
     servicesAreButtons:
-      document.querySelectorAll(".service-selector button").length === 2 &&
+      document.querySelectorAll(".service-selector button").length === 5 &&
       !document.querySelector(".side-menu a"),
     photoLoaded: document.querySelector(".hero__photo").naturalWidth > 0,
     ctaInsideHero:

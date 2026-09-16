@@ -6,7 +6,7 @@ export default function SiteHeader() {
     <header className="site-header">
       <Brand />
       <Link className="text-link" to="/availability">
-        Check Availability
+        Schedule a Meeting
       </Link>
     </header>
   );

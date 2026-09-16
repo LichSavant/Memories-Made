@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { packages } from "../data/packages";
+import { services } from "../data/services";
+import { packagesForEvent } from "../data/packages";
 import { isFutureOrToday, localDateValue } from "../data/eventDate";
 import PageHero from "../components/PageHero";
 const initial = {
@@ -33,10 +34,16 @@ export default function BookingPage() {
       period: ["Morning", "Afternoon", "Evening"].includes(params.get("period"))
         ? params.get("period")
         : "",
-      package: packages.some((item) => item.name === params.get("package"))
+      package: packagesForEvent(
+        services.find(
+          (service) => service.eventType === params.get("eventType"),
+        )?.id,
+      ).some((item) => item.name === params.get("package"))
         ? params.get("package")
         : "",
-      eventType: ["Wedding", "Debut"].includes(params.get("eventType"))
+      eventType: services.some(
+        (service) => service.eventType === params.get("eventType"),
+      )
         ? params.get("eventType")
         : "",
     })),
@@ -45,7 +52,14 @@ export default function BookingPage() {
   useEffect(() => {
     formRef.current?.querySelector("legend")?.focus();
   }, [step]);
-  const change = (e) => setData({ ...data, [e.target.name]: e.target.value });
+  const change = (e) => {
+    const { name, value } = e.target;
+    setData((current) => ({
+      ...current,
+      [name]: value,
+      ...(name === "eventType" ? { package: "" } : {}),
+    }));
+  };
   const validate = () => {
     const next = {};
     if (step === 0 && !data.eventType) next.eventType = "Choose an event type.";
@@ -113,8 +127,9 @@ export default function BookingPage() {
             <fieldset>
               <legend tabIndex={-1}>What are you planning?</legend>
               <div className="choice-grid">
-                {["Wedding", "Debut", "Styling / Other celebration"].map(
-                  (v) => (
+                {services
+                  .map((service) => service.eventType)
+                  .map((v) => (
                     <label className="choice-card" key={v}>
                       <input
                         type="radio"
@@ -128,8 +143,7 @@ export default function BookingPage() {
                       />
                       <span>{v}</span>
                     </label>
-                  ),
-                )}
+                  ))}
               </div>
               <ErrorText id="eventType-error" text={errors.eventType} />
             </fieldset>
@@ -199,7 +213,11 @@ export default function BookingPage() {
                     }
                   >
                     <option value="">Select one</option>
-                    {packages.map((item) => (
+                    {packagesForEvent(
+                      services.find(
+                        (service) => service.eventType === data.eventType,
+                      )?.id,
+                    ).map((item) => (
                       <option key={item.name}>{item.name}</option>
                     ))}
                     <option>Help me decide</option>

@@ -8,7 +8,7 @@ const steps = [
   ],
   [
     "Consultation",
-    "We discuss your priorities, preferences, and the support you need.",
+    "Schedule an online or in-person meeting with a coordinator to discuss your priorities, preferences, and the support you need.",
   ],
   [
     "Proposal and Reservation",
@@ -51,7 +51,7 @@ export default function ProcessPage() {
         <div className="cta-links">
           <PrimaryButton to="/booking">Start Your Inquiry</PrimaryButton>
           <Link className="text-link" to="/availability">
-            Check Availability
+            Schedule a Meeting
           </Link>
         </div>
       </section>

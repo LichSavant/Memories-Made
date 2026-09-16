@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { services } from "../data/services";
 import PageHero from "../components/PageHero";
 export default function ContactPage() {
   const [data, setData] = useState({
@@ -75,9 +76,9 @@ export default function ContactPage() {
                 Event type
                 <select name="type" value={data.type} onChange={change}>
                   <option value="">Select one</option>
-                  <option>Wedding</option>
-                  <option>Debut</option>
-                  <option>Other celebration</option>
+                  {services.map((service) => (
+                    <option key={service.id}>{service.eventType}</option>
+                  ))}
                 </select>
               </label>
               <label className="full-field">

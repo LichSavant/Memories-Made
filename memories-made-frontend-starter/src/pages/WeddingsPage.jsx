@@ -88,7 +88,7 @@ export default function WeddingsPage() {
           <PrimaryButton to="/booking?eventType=Wedding">
             Start Your Inquiry
           </PrimaryButton>
-          <Link className="text-link" to="/packages">
+          <Link className="text-link" to="/packages?event=weddings">
             Explore Packages
           </Link>
         </div>
