@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 import Brand from "./Brand";
 
+import { services } from "../data/services";
+
 const groups = [
   [
     "Services",
     [
-      ["Weddings", "/weddings"],
-      ["Debuts", "/debuts"],
+      ["All Services", "/services"],
+      ...services.map(({ name, path }) => [name, path]),
     ],
   ],
   [
@@ -20,7 +22,7 @@ const groups = [
   [
     "Plan",
     [
-      ["Check Availability", "/availability"],
+      ["Schedule a Meeting", "/availability"],
       ["Start Your Inquiry", "/booking"],
     ],
   ],
@@ -51,7 +53,7 @@ export default function Footer() {
         ))}
       </nav>
       <p className="footer-colophon">
-        © {new Date().getFullYear()} Memories Made. Weddings &amp; events,
+        © {new Date().getFullYear()} MemoriesMade. Weddings &amp; events,
         thoughtfully planned.
       </p>
     </footer>

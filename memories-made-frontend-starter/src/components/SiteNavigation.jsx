@@ -1,16 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
+import { services as serviceConfig } from "../data/services";
+
 const destinations = [
   ["Packages", "/packages"],
   ["Gallery", "/gallery"],
   ["Process", "/process"],
-  ["Availability", "/availability"],
+  ["Schedule a Meeting", "/availability"],
   ["Contact", "/contact"],
 ];
 const services = [
-  ["Weddings", "/weddings"],
-  ["Debuts", "/debuts"],
+  ["All Services", "/services"],
+  ...serviceConfig.map(({ name, path }) => [name, path]),
 ];
 const activeClass = ({ isActive }) => (isActive ? "is-active" : undefined);
 
@@ -77,8 +79,7 @@ export default function SiteNavigation() {
                 : undefined
             }
           >
-            Services{" "}
-            <span aria-hidden="true">{servicesOpen ? "-" : "+"}</span>
+            Services <span aria-hidden="true">{servicesOpen ? "-" : "+"}</span>
           </button>
           <div
             id="service-navigation"
@@ -116,7 +117,7 @@ export default function SiteNavigation() {
         className="mobile-navigation-panel"
         hidden={!open}
       >
-        <p className="section-kicker">Explore Memories Made</p>
+        <p className="section-kicker">Explore MemoriesMade</p>
         <div className="mobile-services">
           <span>Services</span>
           {services.map(link)}

@@ -102,7 +102,7 @@ export default function CelebrationImage({ item, images = celebrations }) {
           >
             <div className="photo-viewer__content">
               <header>
-                <span>Memories Made / Portfolio preview</span>
+                <span>MemoriesMade / Portfolio preview</span>
                 <button
                   type="button"
                   autoFocus

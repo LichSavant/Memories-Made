@@ -26,6 +26,19 @@ export const serviceBackgrounds = {
   ],
 };
 
+// Reused local placeholders, NOT approved photographs of these event types.
+// Replace these mappings with approved, category-specific assets when available.
+export const placeholderCollections = {
+  prenups: [serviceBackgrounds.weddings[2], serviceBackgrounds.weddings[0]],
+  anniversaries: [
+    serviceBackgrounds.weddings[1],
+    serviceBackgrounds.weddings[3],
+  ],
+  parties: [serviceBackgrounds.debuts[1], serviceBackgrounds.debuts[2]],
+  more: [serviceBackgrounds.debuts[3], serviceBackgrounds.weddings[1]],
+};
+Object.assign(serviceBackgrounds, placeholderCollections);
+
 export function getBackgrounds(service) {
   return serviceBackgrounds[service] ?? [fallbackBackground];
 }

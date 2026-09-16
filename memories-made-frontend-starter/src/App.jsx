@@ -1,5 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import SiteLayout from "./layouts/SiteLayout";
+import ServicesPage from "./pages/ServicesPage";
+import ServicePage from "./pages/ServicePage";
 import HomePage from "./pages/HomePage";
 import WeddingsPage from "./pages/WeddingsPage";
 import DebutsPage from "./pages/DebutsPage";
@@ -16,6 +18,8 @@ export default function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route element={<SiteLayout />}>
+        <Route path="/services" element={<ServicesPage />} />
+        <Route path="/services/:serviceId" element={<ServicePage />} />
         <Route path="/weddings" element={<WeddingsPage />} />
         <Route path="/debuts" element={<DebutsPage />} />
         <Route path="/packages" element={<PackagesPage />} />

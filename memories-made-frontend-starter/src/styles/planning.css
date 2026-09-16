@@ -1,0 +1,452 @@
+﻿/* Extensions to the existing warm editorial direction. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.brand strong {
+  text-transform: none;
+  letter-spacing: 0.035em;
+}
+.hero .side-menu {
+  padding-top: 5rem;
+}
+.hero .service-selector {
+  gap: 0.6rem;
+}
+.service-story__image img {
+  transition: filter 300ms ease;
+}
+.service-story__image:hover img {
+  filter: brightness(1.06);
+}
+.service-story__copy h3 {
+  margin-block: 0.65rem;
+}
+.package-experience {
+  padding-top: 1rem;
+}
+.event-selector {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1rem;
+}
+.event-selector button {
+  position: relative;
+  padding: 0;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--text);
+  text-align: left;
+  transition:
+    border-color 250ms ease,
+    background 250ms ease;
+}
+.event-selector img {
+  display: block;
+  width: 100%;
+  height: 10rem;
+  object-fit: cover;
+  filter: saturate(0.7);
+  transition: filter 250ms ease;
+}
+.event-selector button > span {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 6.5rem;
+  padding: 1rem 0.8rem;
+  font:
+    400 1.6rem/1.1 "Cormorant Garamond",
+    Georgia,
+    serif;
+}
+.event-selector small {
+  display: block;
+  padding-top: 0.8rem;
+  font:
+    500 0.6rem/1.4 Inter,
+    sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.event-selector button[aria-pressed="true"] {
+  border-color: var(--blush);
+  background: #f0dcd5;
+  box-shadow: inset 0 -3px var(--blush);
+}
+.event-selector button:is(:hover, [aria-pressed="true"]) img {
+  filter: saturate(1);
+}
+.package-results {
+  margin-top: 3.5rem;
+  min-height: 9rem;
+}
+.selection-prompt {
+  text-align: center;
+  padding-block: 2rem;
+  color: var(--text-muted);
+}
+.package-options {
+  margin-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+.package-option {
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  gap: 1rem 2rem;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  padding: 2rem 0;
+}
+.package-option h3 {
+  margin: 0;
+  font:
+    400 clamp(2.2rem, 4vw, 3.2rem)/1.1 "Cormorant Garamond",
+    Georgia,
+    serif;
+}
+.package-option p {
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+.package-detail {
+  grid-column: 2 / -1;
+  padding: 1rem 0;
+}
+.package-detail li {
+  margin-block: 0.8rem;
+  color: var(--text-muted);
+}
+.package-detail[hidden] {
+  display: none;
+}
+.package-empty {
+  max-width: 48rem;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border-left: 1px solid var(--champagne);
+  background: linear-gradient(115deg, #efe4d9, transparent);
+}
+.package-empty p {
+  line-height: 1.8;
+}
+.package-empty .primary-button {
+  margin-top: 1rem;
+}
+.gallery-exhibition {
+  background: linear-gradient(
+    180deg,
+    var(--surface),
+    #f1e7de 50%,
+    var(--surface)
+  );
+}
+.gallery-introduction {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 3rem;
+  align-items: end;
+  border-top: 1px solid var(--line);
+  padding-top: 2rem;
+  margin-bottom: 3rem;
+}
+.gallery-introduction .section-kicker {
+  grid-column: 1 / -1;
+}
+.gallery-introduction p:last-child {
+  max-width: 27rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin: 0;
+}
+.gallery-exhibition .gallery-grid {
+  gap: clamp(3rem, 6vw, 6rem);
+  align-items: start;
+}
+.gallery-exhibition .gallery-item figcaption {
+  border-top: 1px solid var(--champagne);
+  margin-top: 1rem;
+  padding-top: 1.3rem;
+  font:
+    400 1.5rem/1.2 "Cormorant Garamond",
+    Georgia,
+    serif;
+}
+.gallery-exhibition .gallery-item figcaption span {
+  font:
+    500 0.6rem/1.8 Inter,
+    sans-serif;
+}
+.gallery-exhibition .editorial-image {
+  box-shadow: 0 16px 36px #80623d18;
+}
+.gallery-exhibition .gallery-item:nth-child(2) .editorial-image {
+  aspect-ratio: 4 / 5;
+}
+.gallery-exhibition .gallery-item:nth-child(3) {
+  padding-top: 5rem;
+}
+.gallery-exhibition .gallery-item:only-child {
+  padding-top: 0;
+}
+.meeting-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  padding-top: 1rem;
+  align-items: start;
+}
+.meeting-intro > p {
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+.meeting-intro h2 {
+  max-width: 12ch;
+}
+.meeting-recap {
+  border-top: 1px solid var(--line);
+  margin-top: 2rem;
+  padding-top: 1rem;
+}
+.meeting-recap div {
+  margin-bottom: 1rem;
+}
+.meeting-recap dt {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+.meeting-recap dd {
+  margin: 0.4rem 0 0;
+}
+.meeting-panel {
+  min-width: 0;
+  background: var(--paper);
+  padding: clamp(1.2rem, 3vw, 3rem);
+  border: 1px solid var(--line);
+  box-shadow: 0 16px 40px #80623d0a;
+}
+.meeting-progress {
+  display: flex;
+  padding: 0;
+  margin: 0 0 2.5rem;
+  list-style: none;
+  gap: 0.5rem;
+}
+.meeting-progress li {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--text-muted);
+  font-size: 0.6rem;
+}
+.meeting-progress li span {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.meeting-progress .is-current {
+  border-bottom: 2px solid var(--blush);
+  color: var(--blush);
+}
+.meeting-progress .is-complete {
+  border-color: var(--champagne);
+}
+.meeting-panel legend {
+  width: 100%;
+  margin-bottom: 2rem;
+  font-size: clamp(2rem, 3vw, 3rem);
+}
+.meeting-panel legend:focus {
+  outline: none;
+}
+.meeting-panel .calendar header {
+  gap: 0.5rem;
+}
+.meeting-panel .calendar h2 {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  text-align: center;
+}
+.meeting-panel .calendar header button {
+  flex-shrink: 0;
+}
+.meeting-choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.meeting-choices .choice-card {
+  grid-column: auto;
+}
+.meeting-choices .choice-card span {
+  min-height: 7rem;
+  font-size: 1.6rem;
+}
+.meeting-choices input:checked + span {
+  background: #f5e6e0;
+  color: var(--blush);
+  border-color: var(--blush);
+}
+.meeting-times .choice-card span {
+  min-height: 3.5rem;
+  font:
+    400 1rem Inter,
+    sans-serif;
+}
+.meeting-location {
+  margin-top: 2rem;
+}
+.meeting-errors {
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.5rem;
+  border-left: 2px solid var(--blush);
+  color: var(--blush);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.meeting-panel .draft-status {
+  margin-top: 2rem;
+  padding-inline: 1rem;
+}
+.meeting-panel .draft-status .text-link {
+  display: flex;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+.step-reveal {
+  animation: planning-enter 350ms var(--motion-ease);
+}
+@keyframes planning-enter {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (min-width: 901px) {
+  .desktop-navigation {
+    gap: clamp(0.7rem, 1.6vw, 2rem);
+  }
+  .bottom-nav .desktop-navigation > a {
+    font-size: 0.63rem;
+    letter-spacing: 0.09em;
+  }
+}
+@media (max-width: 1100px) {
+  .event-selector {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .event-selector img {
+    height: 8rem;
+  }
+  .event-selector button > span {
+    min-height: 5.3rem;
+  }
+}
+@media (max-width: 900px) {
+  .meeting-layout {
+    grid-template-columns: 1fr;
+  }
+  .meeting-intro h2 {
+    max-width: none;
+  }
+  .meeting-recap {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 760px) {
+  .hero .side-menu {
+    padding-top: 0;
+  }
+  .hero .service-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 1.25rem;
+  }
+  .hero .service-selector button {
+    font-size: 0.85rem;
+  }
+  .hero .carousel-progress {
+    margin-top: 0.75rem;
+  }
+  .gallery-introduction {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .gallery-exhibition .gallery-item:nth-child(3) {
+    padding-top: 0;
+  }
+  .gallery-exhibition .gallery-item:first-child .editorial-image {
+    aspect-ratio: 4 / 3;
+  }
+  .gallery-exhibition .gallery-item:nth-child(2) .editorial-image {
+    aspect-ratio: 4 / 5;
+    max-height: 36rem;
+  }
+  .package-option {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 1rem;
+  }
+  .package-option > button {
+    grid-column: 2;
+    justify-self: start;
+  }
+  .package-detail {
+    grid-column: 1 / -1;
+  }
+  .meeting-panel .review-list {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 480px) {
+  .event-selector {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+  .event-selector img {
+    height: 6rem;
+  }
+  .event-selector button > span {
+    font-size: 1.5rem;
+  }
+  .meeting-progress {
+    gap: 0.35rem;
+  }
+  .meeting-progress li {
+    font-size: 0.53rem;
+  }
+  .meeting-choices {
+    gap: 0.6rem;
+  }
+  .meeting-choices .choice-card span {
+    font-size: 1.35rem;
+    padding: 0.65rem;
+  }
+  .meeting-times .choice-card span {
+    font-size: 1rem;
+  }
+  .meeting-panel {
+    padding: 1rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .step-reveal {
+    animation: none;
+  }
+  .event-selector button,
+  .event-selector img,
+  .service-story__image img {
+    transition: none;
+  }
+}

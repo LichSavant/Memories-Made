@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { heroServices, findService, inquiryPath } from "../data/services";
+import ServiceStories from "../components/ServiceStories";
 import Brand from "../components/Brand";
 import PrimaryButton from "../components/PrimaryButton";
 import Footer from "../components/Footer";
@@ -11,20 +13,6 @@ import { getBackgrounds } from "../data/serviceBackgrounds";
 import useReducedMotion from "../hooks/useReducedMotion";
 import useSectionReveal from "../hooks/useSectionReveal";
 
-const services = [
-  ["Weddings", "weddings"],
-  ["Debuts", "debuts"],
-];
-const serviceContent = {
-  weddings: {
-    eyebrow: "Premium Wedding Planning",
-    category: "Weddings",
-  },
-  debuts: {
-    eyebrow: "Signature Debut Planning",
-    category: "Debuts",
-  },
-};
 function CalendarIcon() {
   return (
     <svg viewBox="0 0 48 48" aria-hidden="true">
@@ -44,15 +32,10 @@ function ArrowIcon() {
 export default function HomePage() {
   const [selection, setSelection] = useState({ service: "weddings" });
   const [slideIndex, setSlideIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
   const reducedMotion = useReducedMotion();
   const mainRef = useSectionReveal(reducedMotion);
   const backgrounds = getBackgrounds(selection.service);
-  const canRotate = backgrounds.length > 1;
-  const activeContent = serviceContent[selection.service];
-  const hasRotatingCollections = services.some(
-    ([, service]) => getBackgrounds(service).length > 1,
-  );
+  const activeContent = findService(selection.service);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -65,7 +48,6 @@ export default function HomePage() {
         <section className="hero">
           <HeroBackground
             selection={selection}
-            paused={paused}
             reducedMotion={reducedMotion}
             onSlideChange={setSlideIndex}
           />
@@ -82,7 +64,7 @@ export default function HomePage() {
               role="group"
               aria-label="Choose an event service"
             >
-              {services.map(([label, service]) => (
+              {heroServices.map(({ name: label, id: service }) => (
                 <button
                   key={service}
                   type="button"
@@ -96,17 +78,6 @@ export default function HomePage() {
                 </button>
               ))}
             </div>
-            {hasRotatingCollections && !reducedMotion && (
-              <button
-                className="background-toggle"
-                type="button"
-                onClick={() => setPaused((value) => !value)}
-                aria-pressed={paused}
-                disabled={!canRotate}
-              >
-                {paused ? "Resume backgrounds" : "Pause backgrounds"}
-              </button>
-            )}
             <p className="carousel-progress" aria-hidden="true">
               <span>{String(slideIndex + 1).padStart(2, "0")}</span>
               <i aria-hidden="true" />
@@ -125,12 +96,17 @@ export default function HomePage() {
               Planned
             </h1>
             <p className="hero__copy">
-              Memories Made Events Organizing Services. Personal planning and
-              styling for weddings, debuts, and the moments in between.
+              MemoriesMade. Personal planning and styling for weddings,
+              milestones, and the moments worth gathering for.
             </p>
             <div className="hero__actions">
-              <PrimaryButton to="/booking">Start Your Inquiry</PrimaryButton>
-              <Link className="text-link" to="/packages">
+              <PrimaryButton to={inquiryPath(activeContent)}>
+                Start Your Inquiry
+              </PrimaryButton>
+              <Link
+                className="text-link"
+                to={`/packages?event=${selection.service}`}
+              >
                 Explore Packages
                 <ArrowIcon />
               </Link>
@@ -138,13 +114,13 @@ export default function HomePage() {
           </div>
           <div className="category-label">
             <span>Thoughtfully planned</span>
-            <strong>{activeContent.category}</strong>
+            <strong>{activeContent.name}</strong>
           </div>
           <Link className="availability-card" to="/availability">
             <CalendarIcon />
             <p>
-              <strong>Check Availability</strong>Select a preferred date for the
-              team to confirm.
+              <strong>Schedule a Meeting</strong>Connect with a coordinator,
+              online or in person.
             </p>
           </Link>
           <span className="grid-line grid-line--one" aria-hidden="true" />
@@ -164,42 +140,12 @@ export default function HomePage() {
             planning, coordination, and styling together around what matters to
             you.
           </p>
-          <div className="service-stories">
-            {celebrations.slice(0, 2).map((item, index) => (
-              <article className="service-story" key={item.id}>
-                <div className="service-story__image">
-                  <CelebrationImage item={item} />
-                </div>
-                <div className="service-story__copy">
-                  <span className="section-kicker">
-                    0{index + 1} / {item.type}
-                  </span>
-                  <h3>
-                    {index === 0
-                      ? "Your story, beautifully celebrated."
-                      : "A milestone that feels like you."}
-                  </h3>
-                  <p>
-                    {index === 0
-                      ? "From intimate ceremonies to full-scale celebrations."
-                      : "Elegant milestone celebrations shaped around the celebrant."}
-                  </p>
-                  <Link
-                    className="text-link"
-                    to={index === 0 ? "/weddings" : "/debuts"}
-                  >
-                    Explore {item.type} <ArrowIcon />
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-          <p className="service-scope">
-            Reception &amp; event styling · Prenup styling · Customized
-            celebrations
+          <ServiceStories items={heroServices} />
+          <p className="form-note">
+            Service photography is temporary inspiration imagery.
           </p>
-          <Link className="text-link" to="/contact">
-            Discuss your vision <ArrowIcon />
+          <Link className="text-link" to="/services">
+            Browse all services <ArrowIcon />
           </Link>
         </section>
         <section
@@ -237,7 +183,7 @@ export default function HomePage() {
           className="home-experience content-section editorial-note reveal-section"
           data-reveal
         >
-          <p className="section-kicker">The Memories Made experience</p>
+          <p className="section-kicker">The MemoriesMade experience</p>
           <h2>Present for the moments that matter.</h2>
           <div>
             <p>
@@ -296,13 +242,14 @@ export default function HomePage() {
           <p className="section-kicker">Begin your inquiry</p>
           <h2>Let’s plan a celebration that feels entirely yours.</h2>
           <p className="booking-copy">
-            Have a date in mind? Choose your preference, then tell us about your
-            plans. The team confirms availability before a reservation.
+            Tell us about your event, or arrange a conversation with a
+            coordinator. Choose an online or in-person meeting to begin planning
+            together.
           </p>
           <div className="booking-actions">
             <PrimaryButton to="/booking">Start Your Inquiry</PrimaryButton>
             <Link className="text-link" to="/availability">
-              Check Availability <ArrowIcon />
+              Schedule a Meeting <ArrowIcon />
             </Link>
           </div>
         </section>

@@ -3,7 +3,7 @@ import { getBackgrounds } from "./serviceBackgrounds";
 // Existing temporary assets, not verified client portfolio. Keep the public
 // preview note until the business supplies approved images and their credits.
 export const portfolioNote =
-  "Portfolio preview — temporary inspiration images, pending approved Memories Made event photography.";
+  "Portfolio preview — temporary inspiration images, pending approved MemoriesMade event photography.";
 export const celebrations = [
   {
     id: "wedding-florals",

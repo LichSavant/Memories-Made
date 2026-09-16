@@ -69,7 +69,7 @@ export default function DebutsPage() {
           <PrimaryButton to="/booking?eventType=Debut">
             Start Your Inquiry
           </PrimaryButton>
-          <Link className="text-link" to="/packages">
+          <Link className="text-link" to="/packages?event=debuts">
             Explore Packages
           </Link>
         </div>
